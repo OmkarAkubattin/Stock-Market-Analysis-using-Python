@@ -1,0 +1,13 @@
+{
+    "params":
+    {
+        "local_uri":"mysql://root:@localhost/smt",
+        "prod_uri":"mysql://root:@localhost/smt",
+        "g_login":"",
+        "fb_login":"",
+        "website_name":"SMT",
+        "gmail-user":"akubattino11@gmail.com",
+        "gmail-password":"zntjcsqfejtjsugv"
+    }
+
+}
