@@ -39,7 +39,28 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-
+            <table class="table table-sm" style="font-size: small; color: white;" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Last</th>
+                        <th>Chg</th>
+                        <th>Chg%</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in params['watchlist'] %}
+                    <tr>
+                        <td>{{item}}</td>
+                        <td>{{watchlistdata[item].loc[0,"Close"].round(2)}}</td>
+                        <td>{{watchlistdata[item].loc[0,"Close"]-watchlistdata[item].loc[0,"Open"].round(2)}}</td>
+                        <td>{{watchlistdata[item].loc[0,"Open"]}}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="/">

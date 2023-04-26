@@ -2,19 +2,13 @@ from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-# from flask_mysqldb import MySQL
 import hashlib
-import yfinance as yf
-import json
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
-import plotly.graph_objects as go
-import plotly.express as px
-import plotly
+from apps.smt import Stocks
 import json
-from datetime import datetime
+
 
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
@@ -69,7 +63,7 @@ mail = Mail(app)
 
 @app.route('/setup')
 def setup():
-    url="https://finance.yahoo.com/lookup/equity?s=india&t=A&b=0&c=601"
+    url="https://finance.yahoo.com/lookup/all?s=india&t=A&b=0&c=3184"
     headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"}
     r = requests.get(url, headers=headers)
     content = r.content
@@ -99,32 +93,10 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    Symbol1="SBIN.NS"
-    stockN1="SBIN.NS"
-    getinfo1 = yf.Ticker(Symbol1)
-    stock1=getinfo1.history(period="1mo")#interval="1d"
-    if(request.method=='GET' and "SymbolName" in request.args):
-        # return request.args
-        stockN1=request.args.get("SymbolName")
-        getinfo1 = yf.Ticker(request.args.get("SymbolName"))
-        stock1=getinfo1.history(start=request.args.get("StartDate"),end=request.args.get("EndDate"),interval=request.args.get("Interval"))#interval="1d"
-    stock1.reset_index(drop = False, inplace = True)
-    stock1["Date"]=pd.to_datetime(stock1["Date"],format='%d%m%Y')
-    # stock1=stock1.drop(['Dividends','Stock Splits'], axis=1)
-    stock1['Month']=stock1["Date"].dt.month
-    stock1['Year']=stock1["Date"].dt.year
-    stock1['Day']=stock1["Date"].dt.day
-    Candlestickfig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),open=stock1['Open'],high=stock1['High'],low=stock1['Low'],close=stock1['Close'])])
-    Candlestickfig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    CandlestickgraphJSON = json.dumps(Candlestickfig, cls=plotly.utils.PlotlyJSONEncoder)
-    Linefig = go.Figure(data=[go.Line(y=stock1["Open"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Open')])#fill='tonexty'
-    Linefig.add_trace(go.Line(y=stock1["High"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='High'))
-    Linefig.add_trace(go.Line(y=stock1["Low"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Low'))
-    Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
-    Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
-    # return getinfo1.info
-    return render_template("index.html" , params=params, CandlestickgraphJSON=CandlestickgraphJSON, LinegraphJSON=LinegraphJSON)
+    ob = Stocks()
+    # return ob.getinfo.info
+    # return str(ob.watchlist(params["watchlist"]))
+    return render_template("index.html" , params=params, CandlestickgraphJSON=ob.get_fig() , watchlistdata=ob.watchlist(params["watchlist"]),watchlist=params["watchlist"])
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -220,28 +192,28 @@ def utilities_color():
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
-    Symbol1=stock_slug
-    stockN1=stock_slug
-    getinfo1 = yf.Ticker(Symbol1)
-    stock1=getinfo1.history(period="1mo")#interval="1d"
-    if(request.method=='GET' and "Period_No" in request.args):
-        stock1=getinfo1.history(start=request.args.get("StartDate"),end=request.args.get("EndDate"),interval=request.args.get("Interval"))#interval="1d"
-    stock1.reset_index(drop = False, inplace = True)
-    stock1["Date"]=pd.to_datetime(stock1["Date"],format='%d%m%Y')
-    # stock1=stock1.drop(['Dividends','Stock Splits'], axis=1)
-    stock1['Month']=stock1["Date"].dt.month
-    stock1['Year']=stock1["Date"].dt.year
-    stock1['Day']=stock1["Date"].dt.day
-    Candlestickfig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),open=stock1['Open'],high=stock1['High'],low=stock1['Low'],close=stock1['Close'])])
-    Candlestickfig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    CandlestickgraphJSON = json.dumps(Candlestickfig, cls=plotly.utils.PlotlyJSONEncoder)
-    Linefig = go.Figure(data=[go.Line(y=stock1["Open"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Open')])#fill='tonexty'
-    Linefig.add_trace(go.Line(y=stock1["High"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='High'))
-    Linefig.add_trace(go.Line(y=stock1["Low"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Low'))
-    Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
-    Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template("stockind.html", params=params ,CandlestickgraphJSON=CandlestickgraphJSON, LinegraphJSON=LinegraphJSON, getinfo1=getinfo1.info)
+    # Symbol1=stock_slug
+    # stockN1=stock_slug
+    # getinfo1 = yf.Ticker(Symbol1)
+    # stock1=getinfo1.history(period="1mo")#interval="1d"
+    # if(request.method=='GET' and "Period_No" in request.args):
+    #     stock1=getinfo1.history(start=request.args.get("StartDate"),end=request.args.get("EndDate"),interval=request.args.get("Interval"))#interval="1d"
+    # stock1.reset_index(drop = False, inplace = True)
+    # stock1["Date"]=pd.to_datetime(stock1["Date"],format='%d%m%Y')
+    # # stock1=stock1.drop(['Dividends','Stock Splits'], axis=1)
+    # stock1['Month']=stock1["Date"].dt.month
+    # stock1['Year']=stock1["Date"].dt.year
+    # stock1['Day']=stock1["Date"].dt.day
+    # Candlestickfig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),open=stock1['Open'],high=stock1['High'],low=stock1['Low'],close=stock1['Close'])])
+    # Candlestickfig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
+    # CandlestickgraphJSON = json.dumps(Candlestickfig, cls=plotly.utils.PlotlyJSONEncoder)
+    # Linefig = go.Figure(data=[go.Line(y=stock1["Open"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Open')])#fill='tonexty'
+    # Linefig.add_trace(go.Line(y=stock1["High"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='High'))
+    # Linefig.add_trace(go.Line(y=stock1["Low"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Low'))
+    # Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
+    # Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
+    # LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template("stockind.html", params=params)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
