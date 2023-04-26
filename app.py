@@ -16,9 +16,6 @@ import plotly
 import json
 from datetime import datetime
 
-
-graphJSON=''
-fig=''
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
@@ -126,7 +123,7 @@ def dashbord():
     Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
     Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
     LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
-    return getinfo1.info
+    # return getinfo1.info
     return render_template("index.html" , params=params, CandlestickgraphJSON=CandlestickgraphJSON, LinegraphJSON=LinegraphJSON)
 
 @app.route('/register' , methods = ['GET','POST'])
