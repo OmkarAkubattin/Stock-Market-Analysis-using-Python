@@ -16,9 +16,6 @@ import plotly
 import json
 from datetime import datetime
 
-
-graphJSON=''
-fig=''
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
