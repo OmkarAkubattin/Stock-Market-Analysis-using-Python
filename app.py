@@ -174,6 +174,10 @@ def tables():
     dbdata=stock.query.all()
     return render_template("tables.html", params=params ,dbdata=dbdata)
 
+@app.route('/sip')
+def sip():
+    return render_template("sip.html", params=params)
+
 @app.route('/utilities-animation')
 def utilities_animation():
     return render_template("utilities-animation.html", params=params)
