@@ -10,6 +10,7 @@ from apps.smt import Stocks
 import json
 
 
+
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
@@ -93,10 +94,8 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    ob = Stocks()
-    # return ob.getinfo.info
-    # return str(ob.watchlist(params["watchlist"]))
-    return render_template("index.html" , params=params, CandlestickgraphJSON=ob.get_fig() , watchlistdata=ob.watchlist(params["watchlist"]),watchlist=params["watchlist"])
+    
+    return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -117,7 +116,7 @@ def register():
             db.session.add(userinfo)
             db.session.commit()
             return redirect("/login")
-    return render_template("register.html" , params=params)
+    return render_template("register.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/login' , methods = ['GET','POST'])
 def login():
@@ -129,7 +128,7 @@ def login():
         if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
             session["emailid"] = emailid
             return redirect("/")
-    return render_template("login.html" , params=params)
+    return render_template("login.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/logout')
 def logout():
@@ -139,23 +138,28 @@ def logout():
 
 @app.route('/404')
 def error():
-    return render_template("404.html", params=params)
+    return render_template("404.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+
+@app.route('/Symbol', methods = ['GET'])
+def Symbol():
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
+    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext)
 
 @app.route('/blank')
 def blank():
-    return render_template("blank.html", params=params)
+    return render_template("blank.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/buttons')
 def buttons():
-    return render_template("buttons.html", params=params)
+    return render_template("buttons.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/cards')
 def cards():
-    return render_template("cards.html", params=params)
+    return render_template("cards.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/charts')
 def charts():
-    return render_template("charts.html", params=params)
+    return render_template("charts.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/forgot-password', methods=['GET','POST'])
 def forgot_password():
@@ -167,32 +171,32 @@ def forgot_password():
         recipients = [params['gmail-user']],
         body = "message",
         )
-    return render_template("forgot-password.html", params=params)
+    return render_template("forgot-password.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/tables')
 def tables():
     dbdata=stock.query.all()
-    return render_template("tables.html", params=params ,dbdata=dbdata)
+    return render_template("tables.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]) ,dbdata=dbdata)
 
 @app.route('/sip')
 def sip():
-    return render_template("sip.html", params=params)
+    return render_template("sip.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/utilities-animation')
 def utilities_animation():
-    return render_template("utilities-animation.html", params=params)
+    return render_template("utilities-animation.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/utilities-border')
 def utilities_border():
-    return render_template("utilities-border.html", params=params)
+    return render_template("utilities-border.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/utilities-other')
 def utilities_other():
-    return render_template("utilities-other.html", params=params)
+    return render_template("utilities-other.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/utilities-color')
 def utilities_color():
-    return render_template("utilities-color.html", params=params)
+    return render_template("utilities-color.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
@@ -217,7 +221,7 @@ def stock_route(stock_slug):
     # Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
     # Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
     # LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template("stockind.html", params=params)
+    return render_template("stockind.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)

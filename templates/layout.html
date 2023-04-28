@@ -39,7 +39,8 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            <table class="table table-sm" style="font-size: small; color: white;" width="100%" cellspacing="0">
+            <table class="table table-sm" style="font-size: small; color: white;" id="watchlist" width="100%" cellspacing="0" 
+            data-resizable="true">
                 <thead>
                     <tr>
                         <th>Symbol</th>
@@ -54,8 +55,8 @@
                     <tr>
                         <td>{{item}}</td>
                         <td>{{watchlistdata[item].loc[0,"Close"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Close"]-watchlistdata[item].loc[0,"Open"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Open"]}}</td>
+                        <td>{{watchlistdata[item].loc[0,"Change"].round(2)}}</td>
+                        <td>{{watchlistdata[item].loc[0,"Change%"].round(2)}}</td>
                         <td></td>
                     </tr>
                     {% endfor %}
@@ -436,18 +437,20 @@
     <script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 </body>
-<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-<script type='text/javascript'>
-    var CandlestickgraphJSON = {{CandlestickgraphJSON | safe}};
-    Plotly.plot('Candlestickgraph',CandlestickgraphJSON,{});
-    var LinegraphJSON = {{LinegraphJSON | safe}};
-    Plotly.plot('Linegraph',LinegraphJSON,{});
-    $(function () {
-  $('.datepicker').datepicker({
-    language: "es",
-    autoclose: true,
-    format: "yyyy-mm-dd"
-  });
-});
-    </script>
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+        var CandlestickgraphJSON = {{CandlestickgraphJSON | safe}};
+        Plotly.plot('Candlestickgraph',CandlestickgraphJSON,{});
+        var LinegraphJSON = {{LinegraphJSON | safe}};
+        Plotly.plot('Linegraph',LinegraphJSON,{});
+        $(function () {
+        $('.datepicker').datepicker({
+            language: "es",
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+        });
+        </script>
+    
 </html>
