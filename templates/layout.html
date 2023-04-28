@@ -55,9 +55,9 @@
                     {% for item in params['watchlist'] %}
                     <tr>
                         <td>{{item}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Close"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Change"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Change%"].round(2)}}</td>
+                        <td>{{watchlistdata[item]["Close"]}}</td>
+                        <td>{{watchlistdata[item]["Change"]}}</td>
+                        <td>{{watchlistdata[item]["Change%"]}}</td>
                         <td><button type="button" class="btn btn-close" aria-label="Close"></button></td>
                     </tr>
                     {% endfor %}

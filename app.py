@@ -95,6 +95,9 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
+    ob=Stocks()
+    # return ob.get
+    # return ob.watchlist(watchlist=params["watchlist"])
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
     
 
