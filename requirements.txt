@@ -1,0 +1,11 @@
+flask
+turbo-flask
+flask_mail
+flask_sqlalchemy
+flask_session
+bs4
+requests
+pandas
+plotly
+yfinance
+mysqlclient

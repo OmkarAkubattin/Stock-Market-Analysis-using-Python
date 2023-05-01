@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>{{params['website_name']}} Dashboard</title>
-    
+    {{ turbo() }}
     <!-- Custom fonts for this template-->
     <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -19,6 +19,7 @@
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static',filename='css/sb-admin-2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -54,10 +55,10 @@
                     {% for item in params['watchlist'] %}
                     <tr>
                         <td>{{item}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Close"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Change"].round(2)}}</td>
-                        <td>{{watchlistdata[item].loc[0,"Change%"].round(2)}}</td>
-                        <td></td>
+                        <td>{{watchlistdata[item]["Close"]}}</td>
+                        <td>{{watchlistdata[item]["Change"]}}</td>
+                        <td>{{watchlistdata[item]["Change%"]}}</td>
+                        <td><button type="button" class="btn btn-close" aria-label="Close"></button></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -439,6 +440,21 @@
 </body>
 
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('button').forEach(button => {
+                button.onclick = () => {
+                    const request = new XMLHttpRequest();
+                    request.open('POST', `/${button.id}`);
+                    request.onload = () => {
+                        const response = request.responseText;
+                        document.getElementById('count').innerHTML = response;
+                    }; 
+                    request.send();
+                };
+            });
+        });
+    </script>
     <script type='text/javascript'>
         var CandlestickgraphJSON = {{CandlestickgraphJSON | safe}};
         Plotly.plot('Candlestickgraph',CandlestickgraphJSON,{});
