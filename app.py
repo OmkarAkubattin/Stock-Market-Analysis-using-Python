@@ -95,16 +95,11 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-=======
     ob=Stocks()
     # return ob.get
     # return ob.watchlist(watchlist=params["watchlist"])
->>>>>>> 5874e2b3b6de2b21c62a05f7d43b15002e7dfa0b
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
     
 >>>>>>> d8cb4320409dbd743753e998c06c07d2dd824a5e
