@@ -95,9 +95,6 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    ob=Stocks()
-    # return ob.get
-    # return ob.watchlist(watchlist=params["watchlist"])
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
     
 
@@ -146,8 +143,9 @@ def error():
 
 @app.route('/Symbol', methods = ['GET'])
 def Symbol():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
-    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext)
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo",stocprice=True)
+    # return obforcontext.get_fig()
+    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext,obgraph=obforcontext.get_fig())
 
 @app.route('/blank')
 def blank():

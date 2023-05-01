@@ -19,7 +19,6 @@
     <!-- Custom styles for this template-->
     <link href="{{ url_for('static',filename='css/sb-admin-2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -437,29 +436,11 @@
     <script src="{{ url_for('static',filename='js/demo/chart-area-demo.js')}}"></script>
     <script src="{{ url_for('static',filename='js/demo/chart-pie-demo.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-</body>
-
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('button').forEach(button => {
-                button.onclick = () => {
-                    const request = new XMLHttpRequest();
-                    request.open('POST', `/${button.id}`);
-                    request.onload = () => {
-                        const response = request.responseText;
-                        document.getElementById('count').innerHTML = response;
-                    }; 
-                    request.send();
-                };
-            });
-        });
-    </script>
+</body>
     <script type='text/javascript'>
-        var CandlestickgraphJSON = {{CandlestickgraphJSON | safe}};
-        Plotly.plot('Candlestickgraph',CandlestickgraphJSON,{});
-        var LinegraphJSON = {{LinegraphJSON | safe}};
-        Plotly.plot('Linegraph',LinegraphJSON,{});
+        var obgraph = {{obgraph | safe}};
+        Plotly.plot('obgraph',obgraph,{});
         $(function () {
         $('.datepicker').datepicker({
             language: "es",
