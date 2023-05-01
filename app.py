@@ -101,8 +101,6 @@ def dashbord():
     # return ob.get
     # return ob.watchlist(watchlist=params["watchlist"])
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
-    
->>>>>>> d8cb4320409dbd743753e998c06c07d2dd824a5e
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -142,7 +140,6 @@ def login():
 def logout():
     session["emailid"] = None
     return redirect("/")
-
 
 @app.route('/404')
 def error():
@@ -239,3 +236,4 @@ def stock_route(stock_slug):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
+    
