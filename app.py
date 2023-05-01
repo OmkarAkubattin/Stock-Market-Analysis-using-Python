@@ -94,14 +94,15 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    
-    return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
+    return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
     if(session["emailid"] != None):
         return redirect("/")
     if(request.method=='POST'):
+        
         firstname = request.form.get("firstname")
         lastname = request.form.get("lastname")
         emailid = request.form.get("emailid")
@@ -144,6 +145,11 @@ def error():
 def Symbol():
     obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
     return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext)
+
+@app.route('/s_index')
+def s_index():
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
+    return render_template("s_index.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]) ,ob=obforcontext)
 
 @app.route('/blank')
 def blank():

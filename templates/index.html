@@ -10,6 +10,37 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
                     
+
+
+                {% for show in dbdata %}
+
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+
+                                        <div class="media">
+                                            <img src="static\img\nifty.svg" width="20%" class="rounded-circle align-self-center mr-3" alt="...">
+                                                <div class="media-body">
+                                                    <h5 class="mt-0">{{ob.getinfo.info['symbol']}}</h5>
+                                                    <h5 style="display:inline-block;"><b>+{{ob.stock.loc[ob.stock['Close'].size-1,'Close'].round(2)}}<span style="font-size:0.8rem; ">INR </span></b></h5> &nbsp;
+                                                    <span style="color: rgb(8, 153,129)">
+                                                        <h6 style="display:inline-block;"><b>+{{ob.stock.loc[ob.stock['Change%'].size-1,'Change%'].round(2)}}%</b></h6>
+                                                    </span>
+                                                </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div>
+
+                {% endfor %}
+                    
                     
                     <div class="row">
                     <div class="col-xl-12 col-lg-7">
