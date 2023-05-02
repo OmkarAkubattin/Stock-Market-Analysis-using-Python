@@ -135,6 +135,58 @@
                     </div>  
                     </form>
 
+
+                    <h3>News flow</h3>
+
+
+                    {% for i in range(0,newslen) %}
+                    <div class="row row-cols-1 row-cols-md-5">
+                    {% for j in range(0,5) %}
+                        <div class="col mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <p class="card-text"><small class="text-muted">{{news[(j+(4*i))]["date"]}}</small></p>
+                                  <h5 class="card-title">{{news[(j+(4*i))]["title"]}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- <div class="row row-cols-1 row-cols-md-4">                
+                        <div class="col mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <h5 class="card-title">This card has a regular title and short paragraphy of text below it.</h5>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                  <h5 class="card-title">This card has a regular title and short paragraphy of text below it.</h5>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                  <h5 class="card-title">This card has a regular title and short paragraphy of text below it.</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+
+
                     <!-- Content Row -->
                     <div class="row">
 
@@ -285,6 +337,8 @@
                                 </div>
                             </div>
 
+
+
                         </div>
                     </div>
 
@@ -294,4 +348,4 @@
             </div>
             <!-- End of Main Content -->
 
-            {% endblock %}
+{% endblock %}

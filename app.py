@@ -9,6 +9,12 @@ import requests
 from apps.smt import Stocks
 import json
 from turbo_flask import Turbo
+from GoogleNews import GoogleNews
+from newspaper import Article
+import pandas as pd
+from datetime import date
+import time
+
 
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
@@ -95,7 +101,16 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
+<<<<<<< HEAD
     return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+=======
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
+    # return date.today().strftime('%d/%m/%y')
+    googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
+    googlenews.search('Stock market data')
+    result=googlenews.result()
+    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/5), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+>>>>>>> 0f05f2982a1ed654a6b5dfe6fb3d82a1ce093cd7
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -232,3 +247,4 @@ def stock_route(stock_slug):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
+    
