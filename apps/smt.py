@@ -15,7 +15,7 @@ class Stocks:
             # self.stock=self.stock.round(decimals=2)
             self.stock.reset_index(drop = False, inplace = True)
             self.stock["Date"]=pd.to_datetime(self.stock["Date"],format='%d%m%Y')
-            self.stock=self.stock.drop(['Dividends','Stock Splits'], axis=1)
+            # self.stock=self.stock.drop(['Dividends','Stock Splits'], axis=1)
             self.stock["Change"]=self.stock["Close"]-self.stock["Open"]
             self.stock["Change%"]=self.stock["Close"]/self.stock["Open"]
             # self.stock['Month']=self.stock["Date"].dt.month
@@ -47,5 +47,5 @@ class Stocks:
             pass
         elif chartname=="Pie":
             pass
-        fig.update_layout(xaxis_rangeslider_visible=False,yaxis_title="Price",xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
+        fig.update_layout(xaxis_rangeslider_visible=False,yaxis_title="Price",xaxis_title="Date",autosize=True,margin=dict(l=20, r=20, t=20, b=20),)#title='Overview',width=500,height=500)
         return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
