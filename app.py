@@ -12,6 +12,9 @@ from turbo_flask import Turbo
 from GoogleNews import GoogleNews
 from newspaper import Article
 import pandas as pd
+from datetime import date
+import time
+
 
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
@@ -99,17 +102,11 @@ def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
     obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
-    
-    googlenews=GoogleNews(start='05/01/2020',end='05/31/2020')
+    # return date.today().strftime('%d/%m/%y')
+    googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
     googlenews.search('Stock market data')
     result=googlenews.result()
-    df=pd.DataFrame(result)
-    
-    return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-    ob=Stocks()
-    # return ob.get
-    # return ob.watchlist(watchlist=params["watchlist"])
-    return render_template("index.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/5), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
