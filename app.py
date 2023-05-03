@@ -104,7 +104,7 @@ def dashbord():
     googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
     googlenews.search('Stock Market')
     result=googlenews.result()
-    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/5 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
