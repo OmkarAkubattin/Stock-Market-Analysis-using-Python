@@ -57,7 +57,7 @@
                         <td>{{watchlistdata[item]["Close"]}}</td>
                         <td>{{watchlistdata[item]["Change"]}}</td>
                         <td>{{watchlistdata[item]["Change%"]}}</td>
-                        <td><button type="button" class="btn btn-close" aria-label="Close"></button></td>
+                        <td><button type="button" class="btn btn-close" aria-label="Close" value="Delete" onclick="deleteRow(this)"></button></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -449,5 +449,10 @@
         });
         });
         </script>
-    
+    <script type="text/javascript">
+        function deleteRow(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("watchlist").deleteRow(i);
+             }
+    </script>
 </html>

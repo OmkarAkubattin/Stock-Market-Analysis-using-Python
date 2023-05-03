@@ -54,23 +54,25 @@
                                     <div id='obgraph' class='chart'></div>
                                 </div>
                                 <div class="card-footer">
+                                    <form action="/Symbol" method="GET">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-light">1D</button>
-                                        <button type="button" class="btn btn-light">1W</button>
-                                        <button type="button" class="btn btn-light">1M</button>
-                                        <button type="button" class="btn btn-light">3M</button>
-                                        <button type="button" class="btn btn-light">6M</button>
-                                        <button type="button" class="btn btn-light">1Y</button>
-                                        <button type="button" class="btn btn-light">5Y</button>
-                                        <button type="button" class="btn btn-light">MAX</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_1d">1D</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_7d">1W</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_1mo">1M</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_3mo">3M</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_6mo">6M</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_1y">1Y</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_5y">5Y</button>
+                                        <button type="submit" class="btn btn-light" name="stockSymbol" value="{{ob.getinfo.info['symbol']}}_max">MAX</button>
                                       </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     
-                    <form action="/" method="GET">
+                    <!-- <form action="/" method="GET">
                         <div class="form-row px-5 mx-5 mb-4">
                         <div class="form-group col-md-6 col-xl-4">
                             <label for="">Stock Symbol Name</label>
@@ -114,7 +116,7 @@
                             </button>
                         </div>
                     </div>  
-                    </form>
+                    </form> -->
 
                 </div>
                 <!-- /.container-fluid -->

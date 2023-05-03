@@ -10,52 +10,21 @@
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
                     
-
-
-                {% for show in dbdata %}
-
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-
-                                        <div class="media">
-                                            <img src="static\img\nifty.svg" width="20%" class="rounded-circle align-self-center mr-3" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0">{{ob.getinfo.info['symbol']}}</h5>
-                                                    <h5 style="display:inline-block;"><b>+{{ob.stock.loc[ob.stock['Close'].size-1,'Close'].round(2)}}<span style="font-size:0.8rem; ">INR </span></b></h5> &nbsp;
-                                                    <span style="color: rgb(8, 153,129)">
-                                                        <h6 style="display:inline-block;"><b>+{{ob.stock.loc[ob.stock['Change%'].size-1,'Change%'].round(2)}}%</b></h6>
-                                                    </span>
-                                                </div>
-                                        </div>
-
-                                    </div>
+                    <div class="row row-cols-1 row-cols-md-6">
+                    {% for i in range(0,6) %}
+                        <div class="col-xl-2 col-md-6 mb-4" type="button">
+                            <div class="media shadow p-2">
+                                <img src="static\img\nifty.svg" width="9%" class="rounded-circle align-self-center mr-3" alt="...">
+                                <div class="media-body">
+                                  <h5 class="my-0">{{params['watchlist'][loop.index-1]}}</h5>
+                                  <h5 style="display:inline-block;" class="my-0"><b>{{watchlistdata[params['watchlist'][loop.index-1]]["Close"]}}<span style="font-size:.8rem; "> INR </span></b></h5>
+                                  <span style="color: rgb(8, 153,129)">
+                                        <h6 style="display:inline-block;"><b>+{{watchlistdata[params['watchlist'][loop.index-1]]["Change%"]}}%</b></h6>
+                                  </span>
                                 </div>
                             </div>
                         </div>
-                    <div>
-
-                {% endfor %}
-                    
-                    
-                    <div class="row">
-                    <div class="col-xl-12 col-lg-7">
-                        <div class="media">
-                            <img src="static\img\nifty.svg" width="9%" class="rounded-circle align-self-center mr-3" alt="...">
-                            <div class="media-body">
-                              <h1 class="mt-0"></h1>
-                              <h1 style="display:inline-block;"><b>17813.60 <span style="font-size:1.2rem; ">INR </span></b></h1> &nbsp;
-                              <span style="color: rgb(8, 153,129)">
-                                    <h4 style="display:inline-block;"><b>+44.35</b></h4>&nbsp;&nbsp;
-                                    <h4 style="display:inline-block;"><b>+0.25%</b></h4>
-                              </span>
-                              <p>Last update at Apr 26, 15:29 GMT+5:30</p>
-                            </div>
-                          </div>   
+                    {% endfor %}
                     </div>
                             
                     
@@ -82,14 +51,13 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div id='Candlestickgraph' class='chart'></div>
+                                    <div id='obgraph' class='chart'></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                     
-                    <form action="/" method="GET">
+                    <!-- <form action="/" method="GET">
                         <div class="form-row px-5 mx-5 mb-4">
                         <div class="form-group col-md-6 col-xl-4">
                             <label for="">Stock Symbol Name</label>
@@ -133,7 +101,7 @@
                             </button>
                         </div>
                     </div>  
-                    </form>
+                    </form> -->
 
 
                     <h3>News flow</h3>
@@ -141,8 +109,9 @@
 
                     {% for i in range(0,newslen) %}
                     <div class="row row-cols-1 row-cols-md-5">
-                    {% for j in range(0,5) %}
-                        <div class="col mb-4">
+                    {% for j in range(0,4) %}
+                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col mb-4"> -->
                             <div class="card text-center">
                                 <div class="card-body">
                                     <img src="..." class="card-img-top" alt="...">

@@ -10,7 +10,6 @@ from apps.smt import Stocks
 import json
 from turbo_flask import Turbo
 from GoogleNews import GoogleNews
-from newspaper import Article
 import pandas as pd
 from datetime import date
 import time
@@ -101,12 +100,11 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
-    # return date.today().strftime('%d/%m/%y')
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo",stocprice=True)
     googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
-    googlenews.search('Stock market data')
+    googlenews.search('Stock Market')
     result=googlenews.result()
-    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/5), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -152,16 +150,16 @@ def logout():
 def error():
     return render_template("404.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
-@app.route('/Symbol', methods = ['GET'])
+@app.route('/Symbol', methods = ['GET',"POST"])
 def Symbol():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo",stocprice=True)
-    # return obforcontext.get_fig()
+    if(request.method == "GET" and request.args.get("stockSymbol")!=None):
+        data =request.args.get("stockSymbol").split("_")
+        obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
+        return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext,obgraph=obforcontext.get_fig())
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    # return obforcontextx
+    # return json.loads(str(obforcontext.get_fig()))
     return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext,obgraph=obforcontext.get_fig())
-
-@app.route('/s_index')
-def s_index():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo")
-    return render_template("s_index.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]) ,ob=obforcontext)
 
 @app.route('/blank')
 def blank():
