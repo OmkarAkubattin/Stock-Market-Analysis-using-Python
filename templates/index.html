@@ -13,8 +13,8 @@
                     <div class="row row-cols-1 row-cols-md-6">
                     {% for i in range(0,6) %}
                         <div class="col-xl-2 col-md-6 mb-4" type="button">
-                            <div class="media shadow p-2">
-                                <img src="static\img\nifty.svg" width="9%" class="rounded-circle align-self-center mr-3" alt="...">
+                            <div class="media shadow p-2 pt-3">
+                                <img src="static\img\nifty.svg" width="15%" class="rounded-circle align-self-center mr-3" alt="...">
                                 <div class="media-body">
                                   <h5 class="my-0">{{params['watchlist'][loop.index-1]}}</h5>
                                   <h5 style="display:inline-block;" class="my-0"><b>{{watchlistdata[params['watchlist'][loop.index-1]]["Close"]}}<span style="font-size:.8rem; "> INR </span></b></h5>
