@@ -181,8 +181,31 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">  
+                            <a style="{% if '/' == url_for(request.endpoint) %}color: rgb(0, 47, 255);{% endif %}" class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="{% if '/sip' == url_for(request.endpoint) %}color: rgb(0, 47, 255);{% endif %}" class="nav-link" href="/sip">SIP <span class="sr-only">(current)</span></a>
+                        </li>
+                        
+                        <li class="nav-item">
+                        <div class="dropdown">
+                            <button style="direction: none;" class="btn btn-transparent shadow-none dropdown-toggle nav-link" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Technical Analysis
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                              <button class="dropdown-item" type="button">Moving Average</button>
+                              <button class="dropdown-item" type="button">ROI</button>
+                              <button class="dropdown-item" type="button">Profit/Loss Ratio</button>
+                              <button class="dropdown-item" type="button">Stock Comparison</button>
+                            </div>
+                          </div>
+                        </li>
+                    </ul>
+                    
+                    
+                    <form class="justify-content-center d-none d-sm-inline-block form-inline ml-auto mr-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                                 aria-label="Search" aria-describedby="basic-addon2">

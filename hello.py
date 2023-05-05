@@ -7,7 +7,7 @@ googlenews.search('Stock market indian news')
 result=googlenews.result()
 df=pd.DataFrame(result)
 print(result)
-print(len(result))
+result = result.
 # for i in range(df["title"].siz
 # e-1):
 #           print(df.loc[i,"title"])
