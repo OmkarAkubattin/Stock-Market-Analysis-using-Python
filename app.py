@@ -102,11 +102,7 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    if(request.method == "GET" and request.args.get("stockSymbol")!=None):
-        data =request.args.get("stockSymbol").split("_")
-        obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
-    else:
-        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
     # return str(obforcontext.stock["Open"][obforcontext.stock["Open"].size-30:])
     googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
     googlenews.search('Stock Market')
