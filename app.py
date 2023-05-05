@@ -43,12 +43,14 @@ class stock(db.Model):
 class stock_data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    open = db.Column(db.Integer, nullable=False)
-    high = db.Column(db.Integer, nullable=False)
-    low = db.Column(db.Integer, nullable=False)
-    close = db.Column(db.Integer, nullable=False)
-    adj_close = db.Column(db.Integer, nullable=False)
-    # fk_stock = db.Column(db.Integer, foreign_key=True)
+    open = db.Column(db.Float, nullable=False)
+    high = db.Column(db.Float, nullable=False)
+    low = db.Column(db.Float, nullable=False)
+    close = db.Column(db.Float, nullable=False)
+    volume = db.Column(db.Float, nullable=False)
+    change = db.Column(db.Float, nullable=False)
+    changeper = db.Column(db.Float, nullable=False)
+    fk_stock = db.Column(db.Integer, nullable=False)
 
 class user(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,7 +102,12 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="1mo",stocprice=True)
+    if(request.method == "GET" and request.args.get("stockSymbol")!=None):
+        data =request.args.get("stockSymbol").split("_")
+        obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
+    else:
+        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    # return str(obforcontext.stock["Open"][obforcontext.stock["Open"].size-30:])
     googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
     googlenews.search('Stock Market')
     result=googlenews.result()
@@ -145,21 +152,17 @@ def logout():
     session["emailid"] = None
     return redirect("/")
 
-
 @app.route('/404')
 def error():
     return render_template("404.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 @app.route('/Symbol', methods = ['GET',"POST"])
 def Symbol():
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
-        return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext,obgraph=obforcontext.get_fig())
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-    # return obforcontextx
-    # return json.loads(str(obforcontext.get_fig()))
-    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext,obgraph=obforcontext.get_fig())
+    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext)
 
 @app.route('/blank')
 def blank():
@@ -191,7 +194,7 @@ def forgot_password():
 
 @app.route('/tables')
 def tables():
-    dbdata=stock.query.all()
+    dbdata = stock.query.all()
     return render_template("tables.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]) ,dbdata=dbdata)
 
 @app.route('/sip')
@@ -216,27 +219,6 @@ def utilities_color():
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
-    # Symbol1=stock_slug
-    # stockN1=stock_slug
-    # getinfo1 = yf.Ticker(Symbol1)
-    # stock1=getinfo1.history(period="1mo")#interval="1d"
-    # if(request.method=='GET' and "Period_No" in request.args):
-    #     stock1=getinfo1.history(start=request.args.get("StartDate"),end=request.args.get("EndDate"),interval=request.args.get("Interval"))#interval="1d"
-    # stock1.reset_index(drop = False, inplace = True)
-    # stock1["Date"]=pd.to_datetime(stock1["Date"],format='%d%m%Y')
-    # # stock1=stock1.drop(['Dividends','Stock Splits'], axis=1)
-    # stock1['Month']=stock1["Date"].dt.month
-    # stock1['Year']=stock1["Date"].dt.year
-    # stock1['Day']=stock1["Date"].dt.day
-    # Candlestickfig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),open=stock1['Open'],high=stock1['High'],low=stock1['Low'],close=stock1['Close'])])
-    # Candlestickfig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    # CandlestickgraphJSON = json.dumps(Candlestickfig, cls=plotly.utils.PlotlyJSONEncoder)
-    # Linefig = go.Figure(data=[go.Line(y=stock1["Open"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Open')])#fill='tonexty'
-    # Linefig.add_trace(go.Line(y=stock1["High"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='High'))
-    # Linefig.add_trace(go.Line(y=stock1["Low"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Low'))
-    # Linefig.add_trace(go.Line(y=stock1["Close"],x=pd.to_datetime(stock1["Date"],format='%d%m%Y'),name='Close'))
-    # Linefig.update_layout(xaxis_rangeslider_visible=False,yaxis_title=stockN1,xaxis_title="Date",autosize=True)#title='Overview',width=500,height=500)
-    # LinegraphJSON = json.dumps(Linefig, cls=plotly.utils.PlotlyJSONEncoder)
     return render_template("stockind.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
 if __name__ == '__main__':

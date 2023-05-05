@@ -29,14 +29,14 @@ class Stocks:
             stocksdata[self.getinfo.info["underlyingSymbol"]] = {'Close':round(self.getinfo.info["previousClose"],2),'Change':round(self.getinfo.info["previousClose"]-self.getinfo.info["open"],2),'Change%':round(self.getinfo.info["previousClose"]/self.getinfo.info["open"],2)}
         return stocksdata
 
-    def get_fig(self,chartname="Candlestick"):
+    def get_fig(self,chartname="Candlestick",day=30):
         if chartname=="Candlestick":
-            fig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),open=self.stock['Open'],high=self.stock['High'],low=self.stock['Low'],close=self.stock['Close'])])
+            fig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(self.stock["Date"][self.stock["Date"].size-day:],format='%d%m%Y'),open=self.stock["Open"][self.stock["Open"].size-day:],high=self.stock["High"][self.stock["High"].size-day:],low=self.stock["Low"][self.stock["Low"].size-day:],close=self.stock["Close"][self.stock["Close"].size-day:])])
         elif chartname=="Line":
-            fig = go.Figure(data=[go.Line(y=self.stock["Open"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Open')])#fill='tonexty'
-            fig.add_trace(go.Line(y=self.stock["High"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='High'))
-            fig.add_trace(go.Line(y=self.stock["Low"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Low'))
-            fig.add_trace(go.Line(y=self.stock["Close"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Close'))
+            fig = go.Figure(data=[go.Line(y=self.stock["Open"][self.stock["Open"].size-day:],x=pd.to_datetime(self.stock["Date"][self.stock["Date"].size-day:],format='%d%m%Y'),name='Close',fill='tonexty')])#fill='tonexty'
+            # fig.add_trace(go.Line(y=self.stock["High"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='High'))
+            # fig.add_trace(go.Line(y=self.stock["Low"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Low'))
+            # fig.add_trace(go.Line(y=self.stock["Close"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Close',fill='tonexty'))
         elif chartname=="Donut":
             pass
         elif chartname=="Bar":
@@ -48,4 +48,5 @@ class Stocks:
         elif chartname=="Pie":
             pass
         fig.update_layout(xaxis_rangeslider_visible=False,yaxis_title="Price",xaxis_title="Date",autosize=True,margin=dict(l=20, r=20, t=20, b=20),)#title='Overview',width=500,height=500)
+        # self.chartname = json.loads(jsondata)["data"][0]["type"].capitalize()
         return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
