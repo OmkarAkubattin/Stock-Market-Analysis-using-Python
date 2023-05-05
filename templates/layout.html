@@ -439,8 +439,9 @@
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 </body>
     <script type='text/javascript'>
-        var obgraph = {{obgraph | safe}};
+        var obgraph = {{ob.get_fig() | safe}};
         Plotly.plot('obgraph',obgraph,{});
+        var chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
         $(function () {
         $('.datepicker').datepicker({
             language: "es",
@@ -448,11 +449,79 @@
             format: "yyyy-mm-dd"
         });
         });
-        </script>
-    <script type="text/javascript">
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("watchlist").deleteRow(i);
              }
+        function ChangeGraph(r) {
+            // document.getElementById("obgraph").innerHTML=Node
+            Plotly.deleteTraces('obgraph',[0]);
+            if(r.id=="Line"){
+                var obgraph = {{ob.get_fig("Line") | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+                chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
+            }else{
+                var obgraph = {{ob.get_fig() | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+                chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
+            }
+        }
+        function Changeper(r) {
+            Plotly.deleteTraces('obgraph',[0]);
+            // console.log(chartname)
+            if(chartname=="Scatter"){
+            if(r.id=="1d"){
+                var obgraph = {{ob.get_fig("Line",1) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="7d") {
+                var obgraph = {{ob.get_fig("Line",7) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="3mo") {
+                var obgraph = {{ob.get_fig("Line",90) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="6mo") {
+                var obgraph = {{ob.get_fig("Line",180) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="1y") {
+                var obgraph = {{ob.get_fig("Line",365) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="5y") {
+                var obgraph = {{ob.get_fig("Line",365*5) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="max") {
+                var obgraph = {{ob.get_fig("Line",ob.stock["Open"].size) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else{
+                var obgraph = {{ob.get_fig("Line") | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }
+        }else{
+            if(r.id=="1d"){
+                var obgraph = {{ob.get_fig(day=1) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="7d") {
+                var obgraph = {{ob.get_fig(day=7) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="3mo") {
+                var obgraph = {{ob.get_fig(day=90) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="6mo") {
+                var obgraph = {{ob.get_fig(day=180) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="1y") {
+                var obgraph = {{ob.get_fig(day=365) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="5y") {
+                var obgraph = {{ob.get_fig(day=365*5) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="max") {
+                var obgraph = {{ob.get_fig(day=ob.stock["Open"].size) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else{
+                var obgraph = {{ob.get_fig() | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }
+        }
+    }
     </script>
 </html>
