@@ -462,9 +462,14 @@
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 </body>
     <script type='text/javascript'>
+        try {
         var obgraph = {{ob.get_fig() | safe}};
         Plotly.plot('obgraph',obgraph,{});
         var chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
+        }
+        catch(err) {
+        console.log(err.message);
+        }
         $(function () {
         $('.datepicker').datepicker({
             language: "es",
@@ -475,7 +480,7 @@
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("watchlist").deleteRow(i);
-             }
+            }
         function ChangeGraph(r) {
             // document.getElementById("obgraph").innerHTML=Node
             Plotly.deleteTraces('obgraph',[0]);

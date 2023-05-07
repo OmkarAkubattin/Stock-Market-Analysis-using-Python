@@ -18,6 +18,10 @@ import time
 with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
+obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
+googlenews.search('Stock Market')
+result=googlenews.result()
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -102,12 +106,12 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
-    # return str(obforcontext.stock["Open"][obforcontext.stock["Open"].size-30:])
-    googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
-    googlenews.search('Stock Market')
-    result=googlenews.result()
-    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    if(request.method =="GET" and "changeSymbol" in request.args):
+        obforcontext = Stocks(Symbol=request.args.get("changeSymbol"),period="max",stocprice=True)
+        return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    else:
+        obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
+        return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
@@ -129,7 +133,7 @@ def register():
             db.session.add(userinfo)
             db.session.commit()
             return redirect("/login")
-    return render_template("register.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("register.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/login' , methods = ['GET','POST'])
 def login():
@@ -141,7 +145,7 @@ def login():
         if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
             session["emailid"] = emailid
             return redirect("/")
-    return render_template("login.html" , params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/logout')
 def logout():
@@ -150,31 +154,30 @@ def logout():
 
 @app.route('/404')
 def error():
-    return render_template("404.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("404.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/Symbol', methods = ['GET',"POST"])
 def Symbol():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
-    return render_template("Symbol.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]),ob=obforcontext)
+    return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,ob=obforcontext)
 
 @app.route('/blank')
 def blank():
-    return render_template("blank.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("blank.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/buttons')
 def buttons():
-    return render_template("buttons.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("buttons.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/cards')
 def cards():
-    return render_template("cards.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("cards.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/charts')
 def charts():
-    return render_template("charts.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("charts.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/forgot-password', methods=['GET','POST'])
 def forgot_password():
@@ -186,16 +189,16 @@ def forgot_password():
         recipients = [params['gmail-user']],
         body = "message",
         )
-    return render_template("forgot-password.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/tables')
 def tables():
     dbdata = stock.query.all()
-    return render_template("tables.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]) ,dbdata=dbdata)
+    return render_template("tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
 @app.route('/sip')
 def sip():
-    return render_template("sip.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/moving_average')
 def moving_average():
@@ -203,23 +206,23 @@ def moving_average():
 
 @app.route('/utilities-animation')
 def utilities_animation():
-    return render_template("utilities-animation.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("utilities-animation.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/utilities-border')
 def utilities_border():
-    return render_template("utilities-border.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("utilities-border.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/utilities-other')
 def utilities_other():
-    return render_template("utilities-other.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("utilities-other.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/utilities-color')
 def utilities_color():
-    return render_template("utilities-color.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("utilities-color.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
-    return render_template("stockind.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
