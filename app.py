@@ -204,14 +204,15 @@ def stock_comparison():
 def stock_route(stock_slug):
     return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
+#admin
 @app.route('/admin/', methods = ['GET','POST'])
-def dashbord():
+def admin_dashbord():
     if not session.get("emailid"):
             return redirect("/login")
     return render_template("admin/index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/admin/register' , methods = ['GET','POST'])
-def register():
+def admin_register():
     if(session["emailid"] != None):
         return redirect("/")
     if(request.method=='POST'):
@@ -233,7 +234,7 @@ def register():
     return render_template("admin/register.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/admin/login' , methods = ['GET','POST'])
-def login():
+def admin_login():
     if(request.method=='POST'):
         emailid = request.form.get("emailid")
         pwd = request.form.get("password")
@@ -245,12 +246,12 @@ def login():
     return render_template("admin/login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/admin/logout')
-def logout():
+def admin_logout():
     session["emailid"] = None
     return redirect("/")
 
 @app.route('/admin/forgot-password', methods=['GET','POST'])
-def forgot_password():
+def admin_forgot_password():
     if(session["emailid"] != None):
         return redirect("/")
     if(request.form.get("emailid")!=None):
@@ -262,7 +263,7 @@ def forgot_password():
     return render_template("admin/forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/admin/tables')
-def tables():
+def admin_tables():
     dbdata = stock.query.all()
     return render_template("admin/tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
