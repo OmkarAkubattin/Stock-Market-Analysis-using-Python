@@ -50,3 +50,21 @@ class Stocks:
         fig.update_layout(xaxis_rangeslider_visible=False,yaxis_title="Price",xaxis_title="Date",autosize=True,margin=dict(l=20, r=20, t=20, b=20),)#title='Overview',width=500,height=500)
         # self.chartname = json.loads(jsondata)["data"][0]["type"].capitalize()
         return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    def char_get(self,chartname,data):
+        if chartname=="Candlestick":
+            pass
+        elif chartname=="Line":
+            pass
+        elif chartname=="Donut":
+            pass
+        elif chartname=="Bar":
+            pass
+        elif chartname=="Histogram":
+            pass
+        elif chartname=="Ohlc":
+            pass
+        elif chartname=="Pie":
+            fig = go.Figure(data=[go.Pie(labels=data["labels"], values=data["value"], hole=.3)])
+        fig.update_layout(xaxis_rangeslider_visible=False,autosize=True,margin=dict(l=20, r=20, t=20, b=20),)
+        return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)

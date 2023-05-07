@@ -113,7 +113,7 @@ def dashbord():
         obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
         return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/register' , methods = ['GET','POST'])
+@app.route('register' , methods = ['GET','POST'])
 def register():
     if(session["emailid"] != None):
         return redirect("/")
@@ -135,7 +135,7 @@ def register():
             return redirect("/login")
     return render_template("register.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/login' , methods = ['GET','POST'])
+@app.route('login' , methods = ['GET','POST'])
 def login():
     if(request.method=='POST'):
         emailid = request.form.get("emailid")
@@ -147,39 +147,23 @@ def login():
             return redirect("/")
     return render_template("login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/logout')
+@app.route('logout')
 def logout():
     session["emailid"] = None
     return redirect("/")
 
-@app.route('/404')
+@app.route('404')
 def error():
     return render_template("404.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/Symbol', methods = ['GET',"POST"])
+@app.route('Symbol', methods = ['GET',"POST"])
 def Symbol():
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
     return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/blank')
-def blank():
-    return render_template("blank.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/buttons')
-def buttons():
-    return render_template("buttons.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/cards')
-def cards():
-    return render_template("cards.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/charts')
-def charts():
-    return render_template("charts.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/forgot-password', methods=['GET','POST'])
+@app.route('forgot-password', methods=['GET','POST'])
 def forgot_password():
     if(session["emailid"] != None):
         return redirect("/")
@@ -191,16 +175,16 @@ def forgot_password():
         )
     return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/tables')
+@app.route('tables')
 def tables():
     dbdata = stock.query.all()
     return render_template("tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
-@app.route('/sip')
+@app.route('/admin/sip')
 def sip():
     return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/moving_average')
+@app.route('moving_average')
 def moving_average():
     return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
@@ -216,25 +200,71 @@ def profit_loss_ratio():
 def stock_comparison():
     return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/utilities-animation')
-def utilities_animation():
-    return render_template("utilities-animation.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/utilities-border')
-def utilities_border():
-    return render_template("utilities-border.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/utilities-other')
-def utilities_other():
-    return render_template("utilities-other.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/utilities-color')
-def utilities_color():
-    return render_template("utilities-color.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/stock/<string:stock_slug>', methods=['GET'])
+@app.route('stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
     return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/admin/', methods = ['GET','POST'])
+def dashbord():
+    if not session.get("emailid"):
+            return redirect("/login")
+        return render_template("admin/index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/admin/register' , methods = ['GET','POST'])
+def register():
+    if(session["emailid"] != None):
+        return redirect("/")
+    if(request.method=='POST'):
+        
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        emailid = request.form.get("emailid")
+        pwd = request.form.get("password")
+        cpwd = request.form.get("cpassword")
+        hashpwd = hashlib.md5(pwd.encode())
+        if(pwd==cpwd):
+            userinfo = user(username=emailid,
+                        password=hashpwd.hexdigest(),
+                        firstname=firstname,
+                        lastname=lastname)
+            db.session.add(userinfo)
+            db.session.commit()
+            return redirect("/login")
+    return render_template("admin/register.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/admin/login' , methods = ['GET','POST'])
+def login():
+    if(request.method=='POST'):
+        emailid = request.form.get("emailid")
+        pwd = request.form.get("password")
+        hashpwd = hashlib.md5(pwd.encode())
+        dbdata=user.query.filter_by(username=emailid,password=hashpwd.hexdigest()).one_or_404(description=f"No user named '{emailid}'.")
+        if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
+            session["emailid"] = emailid
+            return redirect("/")
+    return render_template("admin/login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/admin/logout')
+def logout():
+    session["emailid"] = None
+    return redirect("/")
+
+@app.route('/admin/forgot-password', methods=['GET','POST'])
+def forgot_password():
+    if(session["emailid"] != None):
+        return redirect("/")
+    if(request.form.get("emailid")!=None):
+        mail.send_message('New message from Omkar',
+        sender = request.form.get("emailid"),
+        recipients = [params['gmail-user']],
+        body = "message",
+        )
+    return render_template("admin/forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/admin/tables')
+def tables():
+    dbdata = stock.query.all()
+    return render_template("admin/tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
