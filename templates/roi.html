@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block body %}
+         <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">{{hashpwd}}ROI</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    </div>                            
+                    
+                    <div class="col-xl-12 col-lg-7 pt-3">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div id='obgraph' class='chart'></div>
+                            </div>
+                            <div class="card-footer">
+                                    <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-light" id="1d" onclick="Changeper(this)">1D</button>
+                                            <button type="button" class="btn btn-light" id="7d" onclick="Changeper(this)">1W</button>
+                                            <button type="button" class="btn btn-light" id="1mo" onclick="Changeper(this)">1M</button>
+                                            <button type="button" class="btn btn-light" id="3mo" onclick="Changeper(this)">3M</button>
+                                            <button type="button" class="btn btn-light" id="6mo" onclick="Changeper(this)">6M</button>
+                                            <button type="button" class="btn btn-light" id="1y" onclick="Changeper(this)">1Y</button>
+                                            <button type="button" class="btn btn-light" id="5y" onclick="Changeper(this)">5Y</button>
+                                            <button type="button" class="btn btn-light" id="max" onclick="Changeper(this)">MAX</button>
+                                        </div>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button float-left" class="btn btn-light" id="Candlestick" onclick="ChangeGraph(this)">Candlestick</button>
+                                            <button type="button float-left" class="btn btn-light" id="Line" onclick="ChangeGraph(this)">Line</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>News flow</h3>
+
+                    {% for i in range(0,newslen) %}
+                    <div class="row row-cols-1 row-cols-md-5">
+                    {% for j in range(0,4) %}
+                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col mb-4"> -->
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <img src="{{news[(j+(4*i))]['img']}}" class="card-img-top" alt="...">
+                                    <p class="card-text"><small class="text-muted">{{news[(j+(4*i))]["date"]}}</small></p>
+                                  <h5 class="card-title">{{news[(j+(4*i))]["title"]}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    {% endfor %}
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+{% endblock %}
