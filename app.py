@@ -152,7 +152,7 @@ def logout():
     session["emailid"] = None
     return redirect("/")
 
-@app.route('404')
+@app.route('/404')
 def error():
     return render_template("404.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
