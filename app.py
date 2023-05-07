@@ -161,7 +161,7 @@ def Symbol():
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
-    return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,ob=obforcontext)
+    return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/blank')
 def blank():
