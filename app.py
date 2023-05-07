@@ -197,6 +197,10 @@ def tables():
 def sip():
     return render_template("sip.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
 
+@app.route('/moving_average')
+def moving_average():
+    return render_template("moving_average.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+
 @app.route('/utilities-animation')
 def utilities_animation():
     return render_template("utilities-animation.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
