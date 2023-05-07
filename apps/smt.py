@@ -51,14 +51,11 @@ class Stocks:
         # self.chartname = json.loads(jsondata)["data"][0]["type"].capitalize()
         return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     
-    def char_get(self,chartname,data1,data2,data3,data4):
+    def char_get(self,chartname,data):
         if chartname=="Candlestick":
-            fig = go.Figure(data=[go.Candlestick(x=pd.to_datetime(self.stock["Date"][self.stock["Date"].size-day:],format='%d%m%Y'),open=self.stock["Open"][self.stock["Open"].size-day:],high=self.stock["High"][self.stock["High"].size-day:],low=self.stock["Low"][self.stock["Low"].size-day:],close=self.stock["Close"][self.stock["Close"].size-day:])])
+            pass
         elif chartname=="Line":
-            fig = go.Figure(data=[go.Line(y=self.stock["Open"][self.stock["Open"].size-day:],x=pd.to_datetime(self.stock["Date"][self.stock["Date"].size-day:],format='%d%m%Y'),name='Close',fill='tonexty')])#fill='tonexty'
-            # fig.add_trace(go.Line(y=self.stock["High"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='High'))
-            # fig.add_trace(go.Line(y=self.stock["Low"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Low'))
-            # fig.add_trace(go.Line(y=self.stock["Close"],x=pd.to_datetime(self.stock["Date"],format='%d%m%Y'),name='Close',fill='tonexty'))
+            pass
         elif chartname=="Donut":
             pass
         elif chartname=="Bar":
@@ -67,4 +64,7 @@ class Stocks:
             pass
         elif chartname=="Ohlc":
             pass
-        elif chartn
+        elif chartname=="Pie":
+            fig = go.Figure(data=[go.Pie(labels=data["labels"], values=data["value"], hole=.3)])
+        fig.update_layout(xaxis_rangeslider_visible=False,autosize=True,margin=dict(l=20, r=20, t=20, b=20),)
+        return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
