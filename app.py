@@ -200,6 +200,10 @@ def tables():
 def sip():
     return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
+@app.route('/moving_average')
+def moving_average():
+    return render_template("moving_average.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+
 @app.route('/utilities-animation')
 def utilities_animation():
     return render_template("utilities-animation.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
