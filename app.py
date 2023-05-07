@@ -113,7 +113,7 @@ def dashbord():
         obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
         return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('register' , methods = ['GET','POST'])
+@app.route('/register' , methods = ['GET','POST'])
 def register():
     if(session["emailid"] != None):
         return redirect("/")
@@ -135,7 +135,7 @@ def register():
             return redirect("/login")
     return render_template("register.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('login' , methods = ['GET','POST'])
+@app.route('/login' , methods = ['GET','POST'])
 def login():
     if(request.method=='POST'):
         emailid = request.form.get("emailid")
@@ -147,7 +147,7 @@ def login():
             return redirect("/")
     return render_template("login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('logout')
+@app.route('/logout')
 def logout():
     session["emailid"] = None
     return redirect("/")
@@ -156,14 +156,14 @@ def logout():
 def error():
     return render_template("404.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('Symbol', methods = ['GET',"POST"])
+@app.route('/Symbol', methods = ['GET',"POST"])
 def Symbol():
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
     return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('forgot-password', methods=['GET','POST'])
+@app.route('/forgot-password', methods=['GET','POST'])
 def forgot_password():
     if(session["emailid"] != None):
         return redirect("/")
@@ -175,16 +175,16 @@ def forgot_password():
         )
     return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('tables')
+@app.route('/tables')
 def tables():
     dbdata = stock.query.all()
     return render_template("tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
-@app.route('/admin/sip')
+@app.route('/sip')
 def sip():
     return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('moving_average')
+@app.route('/moving_average')
 def moving_average():
     return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
@@ -200,7 +200,7 @@ def profit_loss_ratio():
 def stock_comparison():
     return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('stock/<string:stock_slug>', methods=['GET'])
+@app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
     return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
