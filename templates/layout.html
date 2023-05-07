@@ -10,7 +10,9 @@
     <meta name="author" content="">
 
     <title>{{params['website_name']}} Dashboard</title>
-    {{ turbo() }}
+     <!-- Bootstrap core JavaScript-->
+     <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js')}}"></script>
+     <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- Custom fonts for this template-->
     <link href="{{ url_for('static',filename='vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -187,20 +189,6 @@
                         </li>
                         
                         <li class="nav-item">
-                            <!-- <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle shadow-none nav-link" type="button" data-toggle="dropdown" aria-expanded="false">
-                                  Dropdown button
-                                </button>
-                                <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="/moving_average">Moving Average</a>
-                                <a class="dropdown-item" href="/roi">ROI</a>
-                                <a class="dropdown-item" href="/profit_loss_ratio">Profit/Loss Ratio</a>
-                                <a class="dropdown-item" href="/stock_comparison">Stock Comparison</a>
-
-                                </div>
-                            </div> -->
-
-
                         <div class="dropdown">
                             <button class="btn btn-transparent shadow-none dropdown-toggle nav-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Technical Analysis
@@ -219,6 +207,20 @@
                         </div>
                         </li>
                     </ul>
+                    
+                    
+                    <!-- <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle shadow-none nav-link" type="button" data-toggle="dropdown" aria-expanded="false">
+                          Dropdown button
+                        </button>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/moving_average">Moving Average</a>
+                        <a class="dropdown-item" href="/roi">ROI</a>
+                        <a class="dropdown-item" href="/profit_loss_ratio">Profit/Loss Ratio</a>
+                        <a class="dropdown-item" href="/stock_comparison">Stock Comparison</a>
+                        </div>
+                    </div> -->
+                    
                     
                     
                     <form class="justify-content-center d-none d-sm-inline-block form-inline ml-auto mr-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -458,9 +460,7 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+   
 
     <!-- Core plugin JavaScript-->
     <script src="{{ url_for('static',filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
