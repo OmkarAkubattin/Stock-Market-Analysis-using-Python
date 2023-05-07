@@ -202,7 +202,19 @@ def sip():
 
 @app.route('/moving_average')
 def moving_average():
-    return render_template("moving_average.html", params=params, watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]))
+    return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/roi')
+def roi():
+    return render_template("roi.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/profit_loss_ratio')
+def profit_loss_ratio():
+    return render_template("profit_loss_ratio.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+
+@app.route('/stock_comparison')
+def stock_comparison():
+    return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/utilities-animation')
 def utilities_animation():
