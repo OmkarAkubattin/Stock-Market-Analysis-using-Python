@@ -102,12 +102,15 @@ def setup():
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-    obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
-    # return str(obforcontext.stock["Open"][obforcontext.stock["Open"].size-30:])
     googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
     googlenews.search('Stock Market')
     result=googlenews.result()
-    return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    if(request.method =="GET" and "changeSymbol" in request.args):
+        obforcontext = Stocks(Symbol=request.args.get("changeSymbol"),period="max",stocprice=True)
+        return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    else:
+        obforcontext = Stocks(Symbol=params["watchlist"][0],period="max",stocprice=True)
+        return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():

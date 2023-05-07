@@ -472,10 +472,21 @@
             format: "yyyy-mm-dd"
         });
         });
+        // function indexind(r) {
+        //     const request = new XMLHttpRequest();
+        //     request.open('GET', '/?changeSymbol='+r.id);
+        //     request.onload = () => {
+        //         const response = request.responseText;
+        //         console.log(response)
+        //         Plotly.deleteTraces('obgraph',[0]);
+        //         Plotly.plot('obgraph',JSON.parse(response),{});
+        //     }; 
+        //     request.send();
+        //     }
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("watchlist").deleteRow(i);
-             }
+            }
         function ChangeGraph(r) {
             // document.getElementById("obgraph").innerHTML=Node
             Plotly.deleteTraces('obgraph',[0]);
