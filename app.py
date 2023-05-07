@@ -208,7 +208,7 @@ def stock_route(stock_slug):
 def dashbord():
     if not session.get("emailid"):
             return redirect("/login")
-        return render_template("admin/index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    return render_template("admin/index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/admin/register' , methods = ['GET','POST'])
 def register():
