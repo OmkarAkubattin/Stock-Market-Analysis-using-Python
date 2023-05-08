@@ -476,8 +476,14 @@
 </body>
     <script type='text/javascript'>
         try {
+        const {host, hostname, href, origin, pathname, port, protocol, search} = window.location
+        if(pathname=="/moving_average"){
+            var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg") | safe}};
+            Plotly.plot('obgraph',obgraph,{});
+        }else{
         var obgraph = {{ob.get_fig() | safe}};
         Plotly.plot('obgraph',obgraph,{});
+        }
         var chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
         }
         catch(err) {
@@ -498,7 +504,7 @@
             // document.getElementById("obgraph").innerHTML=Node
             Plotly.deleteTraces('obgraph',[0]);
             if(r.id=="Line"){
-                var obgraph = {{ob.get_fig("Line") | safe}};
+                var obgraph = {{ob.get_fig(chartname="Line") | safe}};
                 Plotly.plot('obgraph',obgraph,{});
                 chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
             }else{
@@ -510,57 +516,87 @@
         function Changeper(r) {
             Plotly.deleteTraces('obgraph',[0]);
             // console.log(chartname)
-            if(chartname=="Scatter"){
-            if(r.id=="1d"){
-                var obgraph = {{ob.get_fig("Line",1) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="7d") {
-                var obgraph = {{ob.get_fig("Line",7) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="3mo") {
-                var obgraph = {{ob.get_fig("Line",90) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="6mo") {
-                var obgraph = {{ob.get_fig("Line",180) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="1y") {
-                var obgraph = {{ob.get_fig("Line",365) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="5y") {
-                var obgraph = {{ob.get_fig("Line",365*5) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="max") {
-                var obgraph = {{ob.get_fig("Line",ob.stock["Open"].size) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else{
-                var obgraph = {{ob.get_fig("Line") | safe}};
-                Plotly.plot('obgraph',obgraph,{});
+            if(pathname=="/moving_average"){
+                if(chartname=="Scatter"){
+                if(r.id=="1d"){
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=1) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="7d") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=7) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="3mo") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=90) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="6mo") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=180) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="1y") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=365) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="5y") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=365*5) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="max") {
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=ob.stock["Open"].size) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else{
+                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg") | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }
             }
         }else{
-            if(r.id=="1d"){
-                var obgraph = {{ob.get_fig(day=1) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="7d") {
-                var obgraph = {{ob.get_fig(day=7) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="3mo") {
-                var obgraph = {{ob.get_fig(day=90) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="6mo") {
-                var obgraph = {{ob.get_fig(day=180) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="1y") {
-                var obgraph = {{ob.get_fig(day=365) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="5y") {
-                var obgraph = {{ob.get_fig(day=365*5) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
-            }else if (r.id=="max") {
-                var obgraph = {{ob.get_fig(day=ob.stock["Open"].size) | safe}};
-                Plotly.plot('obgraph',obgraph,{});
+                if(chartname=="Scatter"){
+                if(r.id=="1d"){
+                    var obgraph = {{ob.get_fig(chartname="Line",day=1) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="7d") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=7) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="3mo") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=90) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="6mo") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=180) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="1y") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=365) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="5y") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=365*5) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="max") {
+                    var obgraph = {{ob.get_fig(chartname="Line",day=ob.stock["Open"].size) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else{
+                    var obgraph = {{ob.get_fig(chartname="Line") | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }
             }else{
-                var obgraph = {{ob.get_fig() | safe}};
-                Plotly.plot('obgraph',obgraph,{});
+                if(r.id=="1d"){
+                    var obgraph = {{ob.get_fig(day=1) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="7d") {
+                    var obgraph = {{ob.get_fig(day=7) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="3mo") {
+                    var obgraph = {{ob.get_fig(day=90) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="6mo") {
+                    var obgraph = {{ob.get_fig(day=180) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="1y") {
+                    var obgraph = {{ob.get_fig(day=365) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="5y") {
+                    var obgraph = {{ob.get_fig(day=365*5) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else if (r.id=="max") {
+                    var obgraph = {{ob.get_fig(day=ob.stock["Open"].size) | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }else{
+                    var obgraph = {{ob.get_fig() | safe}};
+                    Plotly.plot('obgraph',obgraph,{});
+                }
             }
         }
     }
