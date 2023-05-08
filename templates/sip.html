@@ -77,13 +77,13 @@
               var P= slider.value;
               var n= slider2.value*12;
               var i= (slider1.value/100)/n;
-              var M = P*((Math.pow(1+i, n)-1) / i)*(1 + i);
+              var M = P*((Math.pow((1+i), n)-1) / i)*(1 + i);
               document.getElementById("demo").value = slider.value;
               document.getElementById("demo1").innerHTML = slider1.value+" %";
               document.getElementById("demo2").innerHTML = slider2.value+" y";
-              document.getElementById("democlone2").innerHTML =(P*n).toFixed(0);
+              document.getElementById("democlone").innerHTML =(P*n).toFixed(0);
               document.getElementById("democlone1").innerHTML = (M-P*n).toFixed(0);
-              document.getElementById("democlone").innerHTML = (M).toFixed(0);
+              document.getElementById("democlone2").innerHTML = (M).toFixed(0);
               new Chart("myChart", {
                 type: "doughnut",
                 data: {
@@ -108,10 +108,10 @@
                 var P= slider.value;
                 var n= slider2.value*12;
                 var i= (slider1.value/100)/n;
-                var M = P*((Math.pow(1+i, n)-1) / i)*(1 + i);
-                document.getElementById("democlone2").innerHTML =(P*n).toFixed(0);
+                var M = P*((Math.pow((1+i), n)-1) / i)*(1 + i);
+                document.getElementById("democlone").innerHTML =(P*n).toFixed(0);
                 document.getElementById("democlone1").innerHTML = (M-P*n).toFixed(0);
-                document.getElementById("democlone").innerHTML = (M).toFixed(0);
+                document.getElementById("democlone2").innerHTML = (M).toFixed(0);
                 new Chart("myChart", {
                 type: "doughnut",
                 data: {
@@ -135,10 +135,10 @@
                 var P= slider.value;
                 var n= slider2.value*12;
                 var i= (slider1.value/100)/n;
-                var M = P*((Math.pow(1+i, n)-1) / i)*(1 + i);
-                document.getElementById("democlone2").innerHTML =(P*n).toFixed(0);
+                var M = P*((Math.pow((1+i), n)-1) / i)*(1 + i);
+                document.getElementById("democlone").innerHTML =(P*n).toFixed(0);
                 document.getElementById("democlone1").innerHTML = (M-P*n).toFixed(0);
-                document.getElementById("democlone").innerHTML = (M).toFixed(0);
+                document.getElementById("democlone2").innerHTML = (M).toFixed(0);
                 new Chart("myChart", {
                 type: "doughnut",
                 data: {
@@ -162,10 +162,11 @@
                 var P= slider.value;
                 var n= slider2.value*12;
                 var i= (slider1.value/100)/n;
-                var M = P*((Math.pow(1+i, n)-1) / i)*(1 + i);
-                document.getElementById("democlone2").innerHTML =(P*n).toFixed(0);
+                var M = P*((Math.pow((1+i), n)-1) / i)*(1 + i);
+                document.getElementById("democlone").innerHTML =(P*n).toFixed(0);
                 document.getElementById("democlone1").innerHTML = (M-P*n).toFixed(0);
-                document.getElementById("democlone").innerHTML = (M).toFixed(0);
+                document.getElementById("democlone2").innerHTML = (M).toFixed(0);
+                console.log((Math.pow((1+i), n)-1)*(1 + i))
                 new Chart("myChart", {
                 type: "doughnut",
                 data: {
