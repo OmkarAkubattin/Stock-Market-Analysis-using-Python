@@ -304,7 +304,7 @@ def users():
     dbdata = user.query.all()
     return render_template("/admin/user.html", params=params, dbdata=dbdata)
     
-@app.route('/admin/edit_stock', methods=['GET'])
+@app.route('/admin/edit_stock', methods=['GET','POST'])
 def edit_stock():
     if request.method == "POST":
         symbol = request.form.get("symbol")
@@ -313,18 +313,17 @@ def edit_stock():
         industry = request.form.get("industry")
         type = request.form.get("stocktype")
         exchange = request.form.get("exchange")
-        stockinfo = user(symbol=symbol,
+        stock(symbol=symbol,
                     name=name,
-                    firstname=lastprice,
-                    lastname=industry,
-                    user_role=type,
-                    exchange=exchange)
-        db.session.add(stockinfo)
+                    lastprice=lastprice,
+                    industry=industry,
+                    type=type,
+                    exchange=exchange).verified =True
         db.session.commit()
         return redirect("/admin/")
     return render_template("/admin/edit_stock.html", params=params)
 
-@app.route('/admin/edit_user', methods=['GET'])
+@app.route('/admin/edit_user', methods=['GET','POST'])
 def user_edit():
     if request.method == "POST":
         firstname = request.form.get("firstname")
@@ -344,7 +343,7 @@ def user_edit():
             return redirect("/admin/users")
     return render_template("/admin/edit_user.html", params=params)
 
-@app.route('/admin/add_stock', methods=['GET'])
+@app.route('/admin/add_stock', methods=['GET','POST'])
 def add_stock():
     if request.method == "POST":
         symbol = request.form.get("symbol")
@@ -353,18 +352,18 @@ def add_stock():
         industry = request.form.get("industry")
         type = request.form.get("stocktype")
         exchange = request.form.get("exchange")
-        stockinfo = user(symbol=symbol,
+        stockinfo = stock(symbol=symbol,
                     name=name,
-                    firstname=lastprice,
-                    lastname=industry,
-                    user_role=type,
+                    lastprice=lastprice,
+                    industry=industry,
+                    type=type,
                     exchange=exchange)
         db.session.add(stockinfo)
         db.session.commit()
-        return redirect("/admin/users")
+        return redirect("/admin/")
     return render_template("/admin/add_stock.html", params=params)
 
-@app.route('/admin/add_user', methods=['GET'])
+@app.route('/admin/add_user', methods=['GET','POST'])
 def add_user():
     if request.method == "POST":
         firstname = request.form.get("firstname")
@@ -384,13 +383,13 @@ def add_user():
             return redirect("/admin/users")
     return render_template("/admin/add_user.html", params=params)
     
-@app.route('/admin/delete_user', methods=['GET'])
+@app.route('/admin/delete_user', methods=['GET','POST'])
 def delete_user():
     if request.form.get("delete_stock"):
         return stock.query.filter_by(id=request.form.get("delete_stock")).first()
         # return redirect("/admin/")
 
-@app.route('/admin/delete_stock', methods=['GET'])
+@app.route('/admin/delete_stock', methods=['GET','POST'])
 def delete_stock():
     if request.form.get("delete_stock"):
         return stock.query.filter_by(id=request.form.get("delete_stock")).first()
