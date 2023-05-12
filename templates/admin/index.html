@@ -39,7 +39,7 @@
                                             <td>{{item.industry}}</td>
                                             <td>{{item.type}}</td>
                                             <td>{{item.exchange}}</td>
-                                            <td><form action="/admin/edit_stock" method="post"><button type="submit" class="btn btn-primary" name="edit_stock" value="{{item.id}}">Edit</button></form></td>
+                                            <td><button type="button" class="btn btn-primary">Edit</button></td>
                                             <td><form action="/admin/delete_user" method="post"><button type="submit" class="btn btn-danger" name="delete_stock" value="{{item.id}}">Delete</button></form></td>
                                         </tr>
                                         {% endfor %}
