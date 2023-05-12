@@ -40,29 +40,6 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            <table class="table table-sm" style="font-size: small; color: white;" id="watchlist" width="100%" cellspacing="0" 
-            data-resizable="true">
-                <thead>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Last</th>
-                        <th>Chg</th>
-                        <th>Chg%</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in params['watchlist'] %}
-                    <tr>
-                        <td>{{item}}</td>
-                        <td>{{watchlistdata[item]["Close"]}}</td>
-                        <td>{{watchlistdata[item]["Change"]}}</td>
-                        <td>{{watchlistdata[item]["Change%"]}}</td>
-                        <td><button type="button" class="btn btn-close" aria-label="Close" value="Delete" onclick="deleteRow(this)"></button></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="/">
@@ -72,87 +49,43 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Calculator
             </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="/buttons">Buttons</a>
-                        <a class="collapse-item" href="/cards">Cards</a>
-                    </div>
-                </div>
+                <a class="nav-link" href="/sip">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Sip Calculator</span></a>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Technical Analysis</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Technical Analysis:</h6>
-                        <a class="collapse-item" href="/moving_average">Moving Average</a>
-                        <a class="collapse-item" href="/roi">ROI</a>
-                        <a class="collapse-item" href="/profit_loss_ratio">Profit/Loss Ratio</a>
-                        <a class="collapse-item" href="/stock_comparison">Stock Comparison</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Technical Analysis
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="/login">Login</a>
-                        <a class="collapse-item" href="/register">Register</a>
-                        <a class="collapse-item" href="/forgot-password">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="/404">404 Page</a>
-                        <a class="collapse-item" href="/blank">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="/charts">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="/tables">
+                <a class="nav-link" href="/moving_average">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>Moving Average</span></a>
+            </li><li class="nav-item">
+                <a class="nav-link" href="/roi">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ROI</span></a>
+            </li><li class="nav-item">
+                <a class="nav-link" href="/profit_loss_ratio">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Profit/Loss Ratio</span></a>
+            </li><li class="nav-item">
+                <a class="nav-link" href="/stock_comparison">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Stock Comparison</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Symbol">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Symbol</span></a>
             </li>
 
             <!-- Divider -->
@@ -181,7 +114,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <ul class="navbar-nav">
+                    <!-- <ul class="navbar-nav">
                         <li class="nav-item">  
                             <a style="{% if '/' == url_for(request.endpoint) %}color: rgb(0, 47, 255);{% endif %}" class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
                         </li>
@@ -195,11 +128,11 @@
                                 Technical Analysis
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <!-- <a class="dropdown-item" href="/moving_average">Moving Average</a>
+                                <a class="dropdown-item" href="/moving_average">Moving Average</a>
                                 <a class="dropdown-item" href="/roi">ROI</a>
                                 <a class="dropdown-item" href="/profit_loss_ratio">Profit/Loss Ratio</a>
                                 <a class="dropdown-item" href="/stock_comparison">Stock Comparison</a> -->
-
+<!-- 
                               <button class="dropdown-item" type="button"> <a href="/moving_average">Moving Average</a></button>
                               <button class="dropdown-item" type="button"> <a href="/roi">ROI</a></button>
                               <button class="dropdown-item" type="button"> <a href="/profit_loss_ratio">Profit/Loss Ratio</a></button>
@@ -207,7 +140,7 @@
                             </div>
                         </div>
                         </li>
-                    </ul>
+                    </ul>  -->
                     
                     
                     <!-- <div class="dropdown">
@@ -475,20 +408,23 @@
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 </body>
     <script type='text/javascript'>
-        try {
-        const {host, hostname, href, origin, pathname, port, protocol, search} = window.location
-        if(pathname=="/moving_average"){
-            var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg") | safe}};
+        {% if '/moving_average' == url_for(request.endpoint) %}
+            var obgraph = {{ob.Moving_avg() | safe}};
             Plotly.plot('obgraph',obgraph,{});
-        }else{
-        var obgraph = {{ob.get_fig() | safe}};
-        Plotly.plot('obgraph',obgraph,{});
-        }
+        {% endif %}
+        {% if '/roi' == url_for(request.endpoint) %}
+            var obgraph = {{ob.Profit_Loss_Roi(stockname=stockname,result=result,roi=roi,boolroi=true) | safe}};
+            Plotly.plot('obgraph',obgraph,{});
+        {% endif %}
+        {% if '/profit_loss_ratio' == url_for(request.endpoint) %}
+            var obgraph = {{ob.Profit_Loss_Roi(stockname=stockname,result=result,roi=roi) | safe}};
+            Plotly.plot('obgraph',obgraph,{});
+        {% endif %}
+        {% if '/' == url_for(request.endpoint) %}
+            var obgraph = {{ob.get_fig() | safe}};
+            Plotly.plot('obgraph',obgraph,{});
+        {% endif %}
         var chartname = obgraph["data"][0]["type"].charAt(0).toUpperCase()+obgraph["data"][0]["type"].slice(1);
-        }
-        catch(err) {
-        console.log(err.message);
-        }
         $(function () {
         $('.datepicker').datepicker({
             language: "es",
@@ -514,91 +450,96 @@
             }
         }
         function Changeper(r) {
-            Plotly.deleteTraces('obgraph',[0]);
+
             // console.log(chartname)
-            if(pathname=="/moving_average"){
-                if(chartname=="Scatter"){
+            {% if '/moving_average' == url_for(request.endpoint) %}
+                Plotly.deleteTraces('obgraph',[0]);
+                Plotly.deleteTraces('obgraph',[0]);
+                Plotly.deleteTraces('obgraph',[0]);
+                Plotly.deleteTraces('obgraph',[0]);
                 if(r.id=="1d"){
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=1) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=1) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="7d") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=7) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=7) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="3mo") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=90) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=90) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="6mo") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=180) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=180) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="1y") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=365) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=365) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="5y") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=365*5) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=365*5) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else if (r.id=="max") {
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg",day=ob.stock["Open"].size) | safe}};
+                    var obgraph = {{ob.Moving_avg(day=ob.stock["Open"].size) | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }else{
-                    var obgraph = {{ob.get_fig(chartname="Line",context="Moving_avg") | safe}};
+                    var obgraph = {{ob.Moving_avg() | safe}};
                     Plotly.plot('obgraph',obgraph,{});
                 }
+            {% endif %}
+            {% if '/' == url_for(request.endpoint) %}
+            Plotly.deleteTraces('obgraph',[0]);
+            if(chartname=="Scatter"){
+            if(r.id=="1d"){
+                console.log("hello")
+                var obgraph = {{ob.get_fig(chartname="Line",day=1) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="7d") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=7) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="3mo") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=90) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="6mo") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=180) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="1y") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=365) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="5y") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=365*5) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="max") {
+                var obgraph = {{ob.get_fig(chartname="Line",day=ob.stock["Open"].size) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else{
+                var obgraph = {{ob.get_fig(chartname="Line") | safe}};
+                Plotly.plot('obgraph',obgraph,{});
             }
         }else{
-                if(chartname=="Scatter"){
-                if(r.id=="1d"){
-                    var obgraph = {{ob.get_fig(chartname="Line",day=1) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="7d") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=7) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="3mo") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=90) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="6mo") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=180) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="1y") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=365) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="5y") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=365*5) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="max") {
-                    var obgraph = {{ob.get_fig(chartname="Line",day=ob.stock["Open"].size) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else{
-                    var obgraph = {{ob.get_fig(chartname="Line") | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }
+            if(r.id=="1d"){
+                var obgraph = {{ob.get_fig(day=1) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="7d") {
+                var obgraph = {{ob.get_fig(day=7) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="3mo") {
+                var obgraph = {{ob.get_fig(day=90) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="6mo") {
+                var obgraph = {{ob.get_fig(day=180) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="1y") {
+                var obgraph = {{ob.get_fig(day=365) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="5y") {
+                var obgraph = {{ob.get_fig(day=365*5) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
+            }else if (r.id=="max") {
+                var obgraph = {{ob.get_fig(day=ob.stock["Open"].size) | safe}};
+                Plotly.plot('obgraph',obgraph,{});
             }else{
-                if(r.id=="1d"){
-                    var obgraph = {{ob.get_fig(day=1) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="7d") {
-                    var obgraph = {{ob.get_fig(day=7) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="3mo") {
-                    var obgraph = {{ob.get_fig(day=90) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="6mo") {
-                    var obgraph = {{ob.get_fig(day=180) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="1y") {
-                    var obgraph = {{ob.get_fig(day=365) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="5y") {
-                    var obgraph = {{ob.get_fig(day=365*5) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else if (r.id=="max") {
-                    var obgraph = {{ob.get_fig(day=ob.stock["Open"].size) | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }else{
-                    var obgraph = {{ob.get_fig() | safe}};
-                    Plotly.plot('obgraph',obgraph,{});
-                }
+                var obgraph = {{ob.get_fig() | safe}};
+                Plotly.plot('obgraph',obgraph,{});
             }
         }
+        {% endif %}
     }
     </script>
 </html>
