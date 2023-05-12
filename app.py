@@ -314,7 +314,7 @@ def stock_route(stock_slug):
 #admin------------------------------------------------
 
 
-@app.route('/admin/')
+@app.route('/admin')
 def admin_dashbord():
     if session.get("user_role") == 1:
         if not session.get("emailid"):
