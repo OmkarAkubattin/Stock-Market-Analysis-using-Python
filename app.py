@@ -338,6 +338,8 @@ def stock_route(stock_slug):
 
 @app.route('/admin/')
 def admin_dashbord():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid"):
             return redirect("/login")
     dbdata = stock.query.all()
@@ -345,6 +347,8 @@ def admin_dashbord():
 
 @app.route('/admin/users')
 def users():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid") :
             return redirect("/login")
     dbdata = user.query.all()
@@ -352,6 +356,8 @@ def users():
     
 @app.route('/admin/edit_stock', methods=['GET','POST'])
 def edit_stock():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid") :
             return redirect("/login")
     if request.method == "POST":
@@ -374,6 +380,8 @@ def edit_stock():
 
 @app.route('/admin/edit_user', methods=['GET','POST'])
 def user_edit():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid") :
             return redirect("/login")
     if request.method == "POST":
@@ -396,6 +404,8 @@ def user_edit():
 
 @app.route('/admin/add_stock', methods=['GET','POST'])
 def add_stock():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid") :
             return redirect("/login")
     if request.method == "POST":
@@ -418,6 +428,8 @@ def add_stock():
 
 @app.route('/admin/add_user', methods=['GET','POST'])
 def add_user():
+    if session.get("user_role") == 0:
+        return redirect("/")
     if not session.get("emailid") :
             return redirect("/login")
     if request.method == "POST":
