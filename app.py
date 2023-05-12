@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 import requests
 from apps.smt import Stocks
 import json
-from turbo_flask import Turbo
 from GoogleNews import GoogleNews
 import pandas as pd
 from datetime import date
@@ -34,7 +33,6 @@ else:
     app.config["SQLALCHEMY_DATABASE_URI"] = params['prod_uri']
 
 db = SQLAlchemy(app)
-turbo = Turbo(app)
 class stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(30), nullable=False)
