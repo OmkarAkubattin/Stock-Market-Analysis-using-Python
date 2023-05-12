@@ -307,9 +307,9 @@ def admin_forgot_password():
         )
     return render_template("admin/forgot-password.html", params=params)
 
-@app.route('/admin/tables')
-def admin_tables():
-    dbdata = stock.query.all()
+@app.route('/admin/users')
+def users():
+    dbdata = user.query.all()
     return render_template("admin/tables.html", params=params, dbdata=dbdata)
 
 @app.route('/admin/edit', methods=['GET'])
