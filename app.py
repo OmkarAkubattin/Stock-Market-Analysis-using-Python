@@ -387,13 +387,19 @@ def add_user():
 @app.route('/admin/delete_user', methods=['GET','POST'])
 def delete_user():
     if request.method == "POST":
-        firstname = request.form.get("firstname")
+        id = request.form.get("delete_stock")
+        stockinfo = user(id=id)
+        db.session.delete(stockinfo)
+        db.session.commit()
 
 
 @app.route('/admin/delete_stock', methods=['GET','POST'])
 def delete_stock():
     if request.method == "POST":
-        firstname = request.form.get("firstname")
+        id = request.form.get("delete_user")
+        userinfo = user(id=id)
+        db.session.delete(userinfo)
+        db.session.commit()
 
         
 
