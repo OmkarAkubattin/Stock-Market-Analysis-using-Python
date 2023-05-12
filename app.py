@@ -103,7 +103,9 @@ def setup():
 
 @app.route('/', methods = ['GET','POST'])
 def dashbord():
-    if not session.get("emailid"):
+    if session.get("user_role") == 1:
+        return redirect("/admin")
+    if not session.get("emailid") :
             return redirect("/login")
     if(request.method =="GET" and "changeSymbol" in request.args):
         obforcontext = Stocks(Symbol=request.args.get("changeSymbol"),period="max",stocprice=True)
