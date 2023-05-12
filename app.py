@@ -313,12 +313,13 @@ def edit_stock():
         industry = request.form.get("industry")
         type = request.form.get("stocktype")
         exchange = request.form.get("exchange")
-        stock(symbol=symbol,
+        stockinfo = stock(symbol=symbol,
                     name=name,
                     lastprice=lastprice,
                     industry=industry,
                     type=type,
-                    exchange=exchange).verified =True
+                    exchange=exchange)
+        stockinfo.verified = True
         db.session.commit()
         return redirect("/admin/")
     return render_template("/admin/edit_stock.html", params=params)
@@ -338,7 +339,7 @@ def user_edit():
                         firstname=firstname,
                         lastname=lastname,
                         user_role=0)
-            db.session.add(userinfo)
+            userinfo.verified = True
             db.session.commit()
             return redirect("/admin/users")
     return render_template("/admin/edit_user.html", params=params)
@@ -385,15 +386,16 @@ def add_user():
     
 @app.route('/admin/delete_user', methods=['GET','POST'])
 def delete_user():
-    if request.form.get("delete_stock"):
-        return stock.query.filter_by(id=request.form.get("delete_stock")).first()
-        # return redirect("/admin/")
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+
 
 @app.route('/admin/delete_stock', methods=['GET','POST'])
 def delete_stock():
-    if request.form.get("delete_stock"):
-        return stock.query.filter_by(id=request.form.get("delete_stock")).first()
-        # return redirect("/admin/")
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+
+        
 
 if __name__ == '__main__':
     app.run(debug=True, port=8800)
