@@ -245,13 +245,13 @@ def profit_loss_ratio():
 def stock_comparison():
     return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/admin/edit')
-def edit():
-    return render_template("admin/edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+@app.route('/admin/edit_stock')
+def edit_stock():
+    return render_template("admin/edit_stock.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/user_edit')
+@app.route('/admin/user_edit')
 def user_edit():
-    return render_template("user_edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    return render_template("admin/user_edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
