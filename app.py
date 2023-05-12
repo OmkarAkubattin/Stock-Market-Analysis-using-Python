@@ -393,6 +393,7 @@ def delete_user():
         stockinfo = user(id=id)
         db.session.delete(stockinfo)
         db.session.commit()
+        return redirect("/admin/users")
 
 
 @app.route('/admin/delete_stock', methods=['GET','POST'])
@@ -402,6 +403,8 @@ def delete_stock():
         userinfo = user(id=id)
         db.session.delete(userinfo)
         db.session.commit()
+        return redirect("/admin/")
+
 
         
 
