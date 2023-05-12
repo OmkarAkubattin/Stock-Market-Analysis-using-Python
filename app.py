@@ -304,7 +304,7 @@ def users():
     return render_template("/admin/tables.html", params=params, dbdata=dbdata)
     
 @app.route('/admin/edit_stock', methods=['GET'])
-def edit():
+def edit_stock():
     if request.form.get("edit_stock"):
         stock.query.filter_by(id=request.form.get("edit_stock")).first()
         return redirect("/admin")
@@ -332,13 +332,13 @@ def add_user():
     return render_template("add_user.html", params=params)
     
 @app.route('/admin/delete_user', methods=['GET'])
-def admin_delete():
+def delete_user():
     if request.form.get("delete_stock"):
         return stock.query.filter_by(id=request.form.get("delete_stock")).first()
         # return redirect("/admin/")
 
 @app.route('/admin/delete_stock', methods=['GET'])
-def admin_delete():
+def delete_stock():
     if request.form.get("delete_stock"):
         return stock.query.filter_by(id=request.form.get("delete_stock")).first()
         # return redirect("/admin/")
