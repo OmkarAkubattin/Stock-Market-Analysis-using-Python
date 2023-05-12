@@ -306,16 +306,42 @@ def users():
     
 @app.route('/admin/edit_stock', methods=['GET'])
 def edit_stock():
-    if request.form.get("edit_stock"):
-        stock.query.filter_by(id=request.form.get("edit_stock")).first()
-        return redirect("/admin")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        name = request.form.get("stockname")
+        lastprice = request.form.get("lastprice")
+        industry = request.form.get("industry")
+        type = request.form.get("stocktype")
+        exchange = request.form.get("exchange")
+        stockinfo = user(symbol=symbol,
+                    name=name,
+                    firstname=lastprice,
+                    lastname=industry,
+                    user_role=type,
+                    exchange=exchange)
+        db.session.add(stockinfo)
+        db.session.commit()
+        return redirect("/admin/")
     return render_template("/admin/edit_stock.html", params=params)
 
 @app.route('/admin/edit_user', methods=['GET'])
 def user_edit():
-    if request.form.get("edit_stock"):
-        stock.query.filter_by(id=request.form.get("edit_stock")).first()
-        return redirect("/admin")
+    if request.method == "POST":
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        emailid = request.form.get("emailid")
+        pwd = request.form.get("password")
+        cpwd = request.form.get("cpassword")
+        hashpwd = hashlib.md5(pwd.encode())
+        if(pwd==cpwd):
+            userinfo = user(username=emailid,
+                        password=hashpwd.hexdigest(),
+                        firstname=firstname,
+                        lastname=lastname,
+                        user_role=0)
+            db.session.add(userinfo)
+            db.session.commit()
+            return redirect("/admin/users")
     return render_template("/admin/edit_user.html", params=params)
 
 @app.route('/admin/add_stock', methods=['GET'])
