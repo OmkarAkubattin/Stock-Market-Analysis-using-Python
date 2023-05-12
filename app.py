@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import requests
 from apps.smt import Stocks
 import json
+from turbo_flask import Turbo
 from GoogleNews import GoogleNews
 import pandas as pd
 from datetime import date
@@ -33,6 +34,7 @@ else:
     app.config["SQLALCHEMY_DATABASE_URI"] = params['prod_uri']
 
 db = SQLAlchemy(app)
+turbo = Turbo(app)
 class stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(30), nullable=False)
@@ -101,9 +103,9 @@ def setup():
 
 @app.route('/', methods = ['GET','POST'])
 def dashbord():
-    if session.get("user_role") == 0:
-        if not session.get("emailid") :
-                return redirect("/login")
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if(request.method =="GET" and "changeSymbol" in request.args):
             obforcontext = Stocks(Symbol=request.args.get("changeSymbol"),period="max",stocprice=True)
             return render_template("index.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
@@ -161,7 +163,9 @@ def error():
 
 @app.route('/Stock', methods = ['GET',"POST"])
 def Stock():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if(request.method == "GET" and request.args.get("stockSymbol")!=None):
             data =request.args.get("stockSymbol").split("_")
             obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
@@ -171,19 +175,24 @@ def Stock():
 
 @app.route('/forgot-password', methods=['GET','POST'])
 def forgot_password():
-    if(session["emailid"] != None):
-        return redirect("/")
-    if(request.form.get("emailid")!=None):
-        mail.send_message('New message from Omkar',
-        sender = request.form.get("emailid"),
-        recipients = [params['gmail-user']],
-        body = "message",
-        )
-    return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
+        if(request.form.get("emailid")!=None):
+            mail.send_message('New message from Omkar',
+            sender = request.form.get("emailid"),
+            recipients = [params['gmail-user']],
+            body = "message",
+            )
+        return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    else:
+        return redirect("/admin")
 
 @app.route('/Symbol')
 def Symbol():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         dbdata = stock.query.all()
         return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
     else:
@@ -192,14 +201,18 @@ def Symbol():
 
 @app.route('/sip')
 def sip():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
     else:
         return redirect("/admin")
 
 @app.route('/moving_average', methods=['GET'])
 def moving_average():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if request.method == "GET" and (request.args.get("symbol")!=None):
             obforcontext = Stocks(Symbol=request.form.get("symbol"),period="max",stocprice=True)
         else:
@@ -210,7 +223,9 @@ def moving_average():
 
 @app.route('/roi', methods=['GET'])
 def roi():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
             obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
             obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
@@ -243,7 +258,9 @@ def roi():
 
 @app.route('/profit_loss_ratio')
 def profit_loss_ratio():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if(request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
             obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
             obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
@@ -276,7 +293,9 @@ def profit_loss_ratio():
 
 @app.route('/stock_comparison')
 def stock_comparison():
-    if session.get("user_role") == 0:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 0:
         if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
             obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
             obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
@@ -314,9 +333,11 @@ def stock_route(stock_slug):
 #admin------------------------------------------------
 
 
-@app.route('/admin')
+@app.route('/admin/')
 def admin_dashbord():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         if not session.get("emailid"):
                 return redirect("/login")
         dbdata = stock.query.all()
@@ -326,7 +347,9 @@ def admin_dashbord():
 
 @app.route('/admin/users')
 def users():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         dbdata = user.query.all()
         return render_template("/admin/user.html", params=params, dbdata=dbdata)
     else:
@@ -334,7 +357,9 @@ def users():
     
 @app.route('/admin/edit_stock', methods=['GET','POST'])
 def edit_stock():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         if request.method == "POST":
             symbol = request.form.get("symbol")
             name = request.form.get("stockname")
@@ -357,7 +382,9 @@ def edit_stock():
 
 @app.route('/admin/edit_user', methods=['GET','POST'])
 def user_edit():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         if request.method == "POST":
             firstname = request.form.get("firstname")
             lastname = request.form.get("lastname")
@@ -380,7 +407,9 @@ def user_edit():
 
 @app.route('/admin/add_stock', methods=['GET','POST'])
 def add_stock():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         if request.method == "POST":
             symbol = request.form.get("symbol")
             name = request.form.get("stockname")
@@ -403,7 +432,9 @@ def add_stock():
 
 @app.route('/admin/add_user', methods=['GET','POST'])
 def add_user():
-    if session.get("user_role") == 1:
+    if not session.get("emailid") :
+         return redirect("/login")
+    elif session.get("user_role") == 1:
         if request.method == "POST":
             firstname = request.form.get("firstname")
             lastname = request.form.get("lastname")
