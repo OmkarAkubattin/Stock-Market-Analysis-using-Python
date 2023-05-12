@@ -118,8 +118,6 @@ def dashbord():
 
 @app.route('/register' , methods = ['GET','POST'])
 def register():
-    if not session.get("emailid") :
-            return redirect("/login")
     if(request.method=='POST'):
         firstname = request.form.get("firstname")
         lastname = request.form.get("lastname")
