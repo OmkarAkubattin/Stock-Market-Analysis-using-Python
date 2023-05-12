@@ -63,7 +63,7 @@ class user(db.Model):
     firstname = db.Column(db.String(30), nullable=False)
     lastname = db.Column(db.String(30), nullable=False)
     phone_no = db.Column(db.Integer, nullable=True)
-    # user_role = db.Column(db.Integer, nullable=False)
+    user_role = db.Column(db.Integer, nullable=False)
 
 app.config.update(
     MAIL_SERVER = 'smtp.gmail.com',
@@ -129,7 +129,8 @@ def register():
             userinfo = user(username=emailid,
                         password=hashpwd.hexdigest(),
                         firstname=firstname,
-                        lastname=lastname)
+                        lastname=lastname,
+                        user_role=0)
             db.session.add(userinfo)
             db.session.commit()
             return redirect("/login")
@@ -144,7 +145,11 @@ def login():
         dbdata=user.query.filter_by(username=emailid,password=hashpwd.hexdigest()).one_or_404(description=f"No user named '{emailid}'.")
         if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
             session["emailid"] = emailid
-            return redirect("/")
+            session["user_role"] = dbdata.user_role
+            if dbdata.user_role == 1:
+                return redirect("/admin")
+            else:
+                return redirect("/")
     return render_template("login.html" , params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/logout')
@@ -313,7 +318,7 @@ def user_edit():
     if request.form.get("edit_stock"):
         stock.query.filter_by(id=request.form.get("edit_stock")).first()
         return redirect("/admin")
-    return render_template("edit_user.html", params=params)
+    return render_template("/admin/edit_user.html", params=params)
 
 @app.route('/admin/add_stock', methods=['GET'])
 def add_stock():
