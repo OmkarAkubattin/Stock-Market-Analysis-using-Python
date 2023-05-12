@@ -189,7 +189,7 @@ def sip():
 
 @app.route('/moving_average', methods=['GET'])
 def moving_average():
-    if request.method == "GET":
+    if request.method == "GET" and (request.args.get("symbol")!=None):
         obforcontext = Stocks(Symbol=request.form.get("symbol"),period="max",stocprice=True)
     else:
         obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
@@ -302,7 +302,7 @@ def admin_dashbord():
 @app.route('/admin/users')
 def users():
     dbdata = user.query.all()
-    return render_template("/admin/tables.html", params=params, dbdata=dbdata)
+    return render_template("/admin/user.html", params=params, dbdata=dbdata)
     
 @app.route('/admin/edit_stock', methods=['GET'])
 def edit_stock():
