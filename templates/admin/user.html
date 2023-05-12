@@ -37,7 +37,7 @@
                                             <td>{{item.lastname}}</td>
                                             <td>{{item.phone_no}}</td>
                                             <td>{% if item.user_role==0 %}Admin{% else %}User{% endif %}</td>
-                                            <td><button type="button" class="btn btn-primary">Edit</button></form></td>
+                                            <td><button type="button" class="btn btn-primary">Edit</button></td>
                                             <td><form action="/admin/delete_user" method="post"><button type="submit" class="btn btn-danger" name="delete_stock" value="{{item.id}}">Delete</button></form></td>
                                         </tr>
                                         {% endfor %}
