@@ -184,14 +184,22 @@ def Symbol():
 def sip():
     return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/moving_average')
+@app.route('/moving_average', methods=['GET'])
 def moving_average():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    if request.method == "GET":
+        obforcontext = Stocks(Symbol=request.form.get("symbol"),period="max",stocprice=True)
+    else:
+        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
     return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/roi')
+@app.route('/roi', methods=['GET'])
 def roi():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    else:
+        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
     stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
     sum=0
     s=0
@@ -202,7 +210,6 @@ def roi():
     tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
     result1=round((tm_end*s)-sum,2)
     roi1=round((result1/sum)*100,2)
-    obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
     stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
     sum=0
     s=0
@@ -217,7 +224,12 @@ def roi():
 
 @app.route('/profit_loss_ratio')
 def profit_loss_ratio():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    if(request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    else:
+        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
     stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
     sum=0
     s=0
@@ -228,7 +240,6 @@ def profit_loss_ratio():
     tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
     result1=round((tm_end*s)-sum,2)
     roi1=round((result1/sum)*100,2)
-    obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
     stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
     sum=0
     s=0
@@ -243,90 +254,90 @@ def profit_loss_ratio():
 
 @app.route('/stock_comparison')
 def stock_comparison():
-    return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    else:
+        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext.stock)):
+        if obforcontext.stock.loc[i,'Day']==30:
+            sum+=obforcontext.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+    result1=round((tm_end*s)-sum,2)
+    roi1=round((result1/sum)*100,2)
+    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext2.stock)):
+        if obforcontext2.stock.loc[i,'Day']==30:
+            sum+=obforcontext2.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+    result2=round((tm_end*s)-sum,2)
+    roi2=round((result2/sum)*100,2)
+    return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
 
-@app.route('/admin/edit')
-def edit():
-    return render_template("admin/edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/user_edit')
-def user_edit():
-    return render_template("user_edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
     return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-#admin
-@app.route('/admin/', methods = ['GET','POST'])
+#admin------------------------------------------------
+
+
+@app.route('/admin/')
 def admin_dashbord():
     if not session.get("emailid"):
             return redirect("/login")
     dbdata = stock.query.all()
-    return render_template("admin/index.html" , params=params, dbdata=dbdata)
-
-@app.route('/admin/register' , methods = ['GET','POST'])
-def admin_register():
-    if(session["emailid"] != None):
-        return redirect("/")
-    if(request.method=='POST'):
-        firstname = request.form.get("firstname")
-        lastname = request.form.get("lastname")
-        emailid = request.form.get("emailid")
-        pwd = request.form.get("password")
-        cpwd = request.form.get("cpassword")
-        hashpwd = hashlib.md5(pwd.encode())
-        if(pwd==cpwd):
-            userinfo = user(username=emailid,
-                        password=hashpwd.hexdigest(),
-                        firstname=firstname,
-                        lastname=lastname)
-            db.session.add(userinfo)
-            db.session.commit()
-            return redirect("/login")
-    return render_template("admin/register.html" , params=params)
-
-@app.route('/admin/login' , methods = ['GET','POST'])
-def admin_login():
-    if(request.method=='POST'):
-        emailid = request.form.get("emailid")
-        pwd = request.form.get("password")
-        hashpwd = hashlib.md5(pwd.encode())
-        dbdata=user.query.filter_by(username=emailid,password=hashpwd.hexdigest()).one_or_404(description=f"No user named '{emailid}'.")
-        if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
-            session["emailid"] = emailid
-            return redirect("/")
-    return render_template("admin/login.html" , params=params)
-
-@app.route('/admin/logout')
-def admin_logout():
-    session["emailid"] = None
-    return redirect("/")
-
-@app.route('/admin/forgot-password', methods=['GET','POST'])
-def admin_forgot_password():
-    if(session["emailid"] != None):
-        return redirect("/")
-    if(request.form.get("emailid")!=None):
-        mail.send_message('New message from Omkar',
-        sender = request.form.get("emailid"),
-        recipients = [params['gmail-user']],
-        body = "message",
-        )
-    return render_template("admin/forgot-password.html", params=params)
+    return render_template("/admin/index.html" , params=params, dbdata=dbdata)
 
 @app.route('/admin/users')
 def users():
     dbdata = user.query.all()
-    return render_template("admin/tables.html", params=params, dbdata=dbdata)
-
-@app.route('/admin/edit', methods=['GET'])
-def admin_edit():
+    return render_template("/admin/tables.html", params=params, dbdata=dbdata)
+    
+@app.route('/admin/edit_stock', methods=['GET'])
+def edit():
     if request.form.get("edit_stock"):
         stock.query.filter_by(id=request.form.get("edit_stock")).first()
         return redirect("/admin")
+    return render_template("/admin/edit_stock.html", params=params)
+
+@app.route('/admin/edit_user', methods=['GET'])
+def user_edit():
+    if request.form.get("edit_stock"):
+        stock.query.filter_by(id=request.form.get("edit_stock")).first()
+        return redirect("/admin")
+    return render_template("edit_user.html", params=params)
+
+@app.route('/admin/add_stock', methods=['GET'])
+def add_stock():
+    if request.form.get("edit_stock"):
+        stock.query.filter_by(id=request.form.get("edit_stock")).first()
+        return redirect("/admin")
+    return render_template("/admin/add_stock.html", params=params)
+
+@app.route('/admin/add_user', methods=['GET'])
+def add_user():
+    if request.form.get("edit_stock"):
+        stock.query.filter_by(id=request.form.get("edit_stock")).first()
+        return redirect("/admin")
+    return render_template("add_user.html", params=params)
     
-@app.route('/admin/delete', methods=['GET'])
+@app.route('/admin/delete_user', methods=['GET'])
+def admin_delete():
+    if request.form.get("delete_stock"):
+        return stock.query.filter_by(id=request.form.get("delete_stock")).first()
+        # return redirect("/admin/")
+
+@app.route('/admin/delete_stock', methods=['GET'])
 def admin_delete():
     if request.form.get("delete_stock"):
         return stock.query.filter_by(id=request.form.get("delete_stock")).first()
