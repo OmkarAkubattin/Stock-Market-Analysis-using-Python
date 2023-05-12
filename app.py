@@ -18,7 +18,7 @@ with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
 obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-googlenews=GoogleNews(start=date.fromtimestamp(time.time()-60*24*30).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
+googlenews=GoogleNews(start=date.fromtimestamp(time.time()-60*24*30*12).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
 googlenews.search('Stock Market')
 result=googlenews.result()
 
