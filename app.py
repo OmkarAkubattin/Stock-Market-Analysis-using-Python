@@ -187,110 +187,129 @@ def forgot_password():
 
 @app.route('/Symbol')
 def Symbol():
-    dbdata = stock.query.all()
-    return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
+    if session.get("user_role") == 0:
+        dbdata = stock.query.all()
+        return render_template("Symbol.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
+    else:
+        return redirect("/admin")
+
 
 @app.route('/sip')
 def sip():
-    return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    if session.get("user_role") == 0:
+        return render_template("sip.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    else:
+        return redirect("/admin")
 
 @app.route('/moving_average', methods=['GET'])
 def moving_average():
-    if request.method == "GET" and (request.args.get("symbol")!=None):
-        obforcontext = Stocks(Symbol=request.form.get("symbol"),period="max",stocprice=True)
+    if session.get("user_role") == 0:
+        if request.method == "GET" and (request.args.get("symbol")!=None):
+            obforcontext = Stocks(Symbol=request.form.get("symbol"),period="max",stocprice=True)
+        else:
+            obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+        return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
     else:
-        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-    return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+        return redirect("/admin")
 
 @app.route('/roi', methods=['GET'])
 def roi():
-    if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
-        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
-        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    if session.get("user_role") == 0:
+        if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+            obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+            obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+        else:
+            obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+            obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+        stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext.stock)):
+            if obforcontext.stock.loc[i,'Day']==30:
+                sum+=obforcontext.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+        result1=round((tm_end*s)-sum,2)
+        roi1=round((result1/sum)*100,2)
+        stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext2.stock)):
+            if obforcontext2.stock.loc[i,'Day']==30:
+                sum+=obforcontext2.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+        result2=round((tm_end*s)-sum,2)
+        roi2=round((result2/sum)*100,2)
+        return render_template("roi.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
     else:
-        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
-    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext.stock)):
-        if obforcontext.stock.loc[i,'Day']==30:
-            sum+=obforcontext.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
-    result1=round((tm_end*s)-sum,2)
-    roi1=round((result1/sum)*100,2)
-    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext2.stock)):
-        if obforcontext2.stock.loc[i,'Day']==30:
-            sum+=obforcontext2.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
-    result2=round((tm_end*s)-sum,2)
-    roi2=round((result2/sum)*100,2)
-    return render_template("roi.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
+        return redirect("/admin")
 
 @app.route('/profit_loss_ratio')
 def profit_loss_ratio():
-    if(request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
-        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
-        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    if session.get("user_role") == 0:
+        if(request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+            obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+            obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+        else:
+            obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+            obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+        stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext.stock)):
+            if obforcontext.stock.loc[i,'Day']==30:
+                sum+=obforcontext.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+        result1=round((tm_end*s)-sum,2)
+        roi1=round((result1/sum)*100,2)
+        stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext2.stock)):
+            if obforcontext2.stock.loc[i,'Day']==30:
+                sum+=obforcontext2.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+        result2=round((tm_end*s)-sum,2)
+        roi2=round((result2/sum)*100,2)
+        return render_template("profit_loss_ratio.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
     else:
-        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
-    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext.stock)):
-        if obforcontext.stock.loc[i,'Day']==30:
-            sum+=obforcontext.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
-    result1=round((tm_end*s)-sum,2)
-    roi1=round((result1/sum)*100,2)
-    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext2.stock)):
-        if obforcontext2.stock.loc[i,'Day']==30:
-            sum+=obforcontext2.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
-    result2=round((tm_end*s)-sum,2)
-    roi2=round((result2/sum)*100,2)
-    return render_template("profit_loss_ratio.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
+        return redirect("/admin")
 
 @app.route('/stock_comparison')
 def stock_comparison():
-    if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
-        obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
-        obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+    if session.get("user_role") == 0:
+        if (request.method == "GET" and (request.args.get("symbol1")!=None and request.args.get("symbol2")!=None)):
+            obforcontext = Stocks(Symbol=request.args.get("symbol1"),period="max",stocprice=True)
+            obforcontext2= Stocks(Symbol=request.args.get("symbol2"),period="max",stocprice=True)
+        else:
+            obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+            obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+        stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext.stock)):
+            if obforcontext.stock.loc[i,'Day']==30:
+                sum+=obforcontext.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+        result1=round((tm_end*s)-sum,2)
+        roi1=round((result1/sum)*100,2)
+        stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+        sum=0
+        s=0
+        for i in range(len(obforcontext2.stock)):
+            if obforcontext2.stock.loc[i,'Day']==30:
+                sum+=obforcontext2.stock.loc[i,'Open']
+                s+=1
+        tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+        result2=round((tm_end*s)-sum,2)
+        roi2=round((result2/sum)*100,2)
+        return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
     else:
-        obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-        obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
-    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext.stock)):
-        if obforcontext.stock.loc[i,'Day']==30:
-            sum+=obforcontext.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
-    result1=round((tm_end*s)-sum,2)
-    roi1=round((result1/sum)*100,2)
-    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
-    sum=0
-    s=0
-    for i in range(len(obforcontext2.stock)):
-        if obforcontext2.stock.loc[i,'Day']==30:
-            sum+=obforcontext2.stock.loc[i,'Open']
-            s+=1
-    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
-    result2=round((tm_end*s)-sum,2)
-    roi2=round((result2/sum)*100,2)
-    return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
+        return redirect("/admin")
 
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
@@ -301,95 +320,113 @@ def stock_route(stock_slug):
 
 @app.route('/admin/')
 def admin_dashbord():
-    if not session.get("emailid"):
-            return redirect("/login")
-    dbdata = stock.query.all()
-    return render_template("/admin/index.html" , params=params, dbdata=dbdata)
+    if session.get("user_role") == 1:
+        if not session.get("emailid"):
+                return redirect("/login")
+        dbdata = stock.query.all()
+        return render_template("/admin/index.html" , params=params, dbdata=dbdata)
+    else:
+        return redirect("/")
 
 @app.route('/admin/users')
 def users():
-    dbdata = user.query.all()
-    return render_template("/admin/user.html", params=params, dbdata=dbdata)
+    if session.get("user_role") == 1:
+        dbdata = user.query.all()
+        return render_template("/admin/user.html", params=params, dbdata=dbdata)
+    else:
+        return redirect("/")
     
 @app.route('/admin/edit_stock', methods=['GET','POST'])
 def edit_stock():
-    if request.method == "POST":
-        symbol = request.form.get("symbol")
-        name = request.form.get("stockname")
-        lastprice = request.form.get("lastprice")
-        industry = request.form.get("industry")
-        type = request.form.get("stocktype")
-        exchange = request.form.get("exchange")
-        stockinfo = stock(symbol=symbol,
-                    name=name,
-                    lastprice=lastprice,
-                    industry=industry,
-                    type=type,
-                    exchange=exchange)
-        stockinfo.verified = True
-        db.session.commit()
-        return redirect("/admin/")
-    return render_template("/admin/edit_stock.html", params=params)
+    if session.get("user_role") == 1:
+        if request.method == "POST":
+            symbol = request.form.get("symbol")
+            name = request.form.get("stockname")
+            lastprice = request.form.get("lastprice")
+            industry = request.form.get("industry")
+            type = request.form.get("stocktype")
+            exchange = request.form.get("exchange")
+            stockinfo = stock(symbol=symbol,
+                        name=name,
+                        lastprice=lastprice,
+                        industry=industry,
+                        type=type,
+                        exchange=exchange)
+            stockinfo.verified = True
+            db.session.commit()
+            return redirect("/admin/")
+        return render_template("/admin/edit_stock.html", params=params)
+    else:
+        return redirect("/")
 
 @app.route('/admin/edit_user', methods=['GET','POST'])
 def user_edit():
-    if request.method == "POST":
-        firstname = request.form.get("firstname")
-        lastname = request.form.get("lastname")
-        emailid = request.form.get("emailid")
-        pwd = request.form.get("password")
-        cpwd = request.form.get("cpassword")
-        hashpwd = hashlib.md5(pwd.encode())
-        if(pwd==cpwd):
-            userinfo = user(username=emailid,
-                        password=hashpwd.hexdigest(),
-                        firstname=firstname,
-                        lastname=lastname,
-                        user_role=0)
-            userinfo.verified = True
-            db.session.commit()
-            return redirect("/admin/users")
-    return render_template("/admin/edit_user.html", params=params)
+    if session.get("user_role") == 1:
+        if request.method == "POST":
+            firstname = request.form.get("firstname")
+            lastname = request.form.get("lastname")
+            emailid = request.form.get("emailid")
+            pwd = request.form.get("password")
+            cpwd = request.form.get("cpassword")
+            hashpwd = hashlib.md5(pwd.encode())
+            if(pwd==cpwd):
+                userinfo = user(username=emailid,
+                            password=hashpwd.hexdigest(),
+                            firstname=firstname,
+                            lastname=lastname,
+                            user_role=0)
+                userinfo.verified = True
+                db.session.commit()
+                return redirect("/admin/users")
+        return render_template("/admin/edit_user.html", params=params)
+    else:
+        return redirect("/")
 
 @app.route('/admin/add_stock', methods=['GET','POST'])
 def add_stock():
-    if request.method == "POST":
-        symbol = request.form.get("symbol")
-        name = request.form.get("stockname")
-        lastprice = request.form.get("lastprice")
-        industry = request.form.get("industry")
-        type = request.form.get("stocktype")
-        exchange = request.form.get("exchange")
-        stockinfo = stock(symbol=symbol,
-                    name=name,
-                    lastprice=lastprice,
-                    industry=industry,
-                    type=type,
-                    exchange=exchange)
-        db.session.add(stockinfo)
-        db.session.commit()
-        return redirect("/admin/")
-    return render_template("/admin/add_stock.html", params=params)
+    if session.get("user_role") == 1:
+        if request.method == "POST":
+            symbol = request.form.get("symbol")
+            name = request.form.get("stockname")
+            lastprice = request.form.get("lastprice")
+            industry = request.form.get("industry")
+            type = request.form.get("stocktype")
+            exchange = request.form.get("exchange")
+            stockinfo = stock(symbol=symbol,
+                        name=name,
+                        lastprice=lastprice,
+                        industry=industry,
+                        type=type,
+                        exchange=exchange)
+            db.session.add(stockinfo)
+            db.session.commit()
+            return redirect("/admin/")
+        return render_template("/admin/add_stock.html", params=params)
+    else:
+        return redirect("/")
 
 @app.route('/admin/add_user', methods=['GET','POST'])
 def add_user():
-    if request.method == "POST":
-        firstname = request.form.get("firstname")
-        lastname = request.form.get("lastname")
-        emailid = request.form.get("emailid")
-        pwd = request.form.get("password")
-        cpwd = request.form.get("cpassword")
-        hashpwd = hashlib.md5(pwd.encode())
-        if(pwd==cpwd):
-            userinfo = user(username=emailid,
-                        password=hashpwd.hexdigest(),
-                        firstname=firstname,
-                        lastname=lastname,
-                        user_role=0)
-            db.session.add(userinfo)
-            db.session.commit()
-            return redirect("/admin/users")
-    return render_template("/admin/add_user.html", params=params)
+    if session.get("user_role") == 1:
+        if request.method == "POST":
+            firstname = request.form.get("firstname")
+            lastname = request.form.get("lastname")
+            emailid = request.form.get("emailid")
+            pwd = request.form.get("password")
+            cpwd = request.form.get("cpassword")
+            hashpwd = hashlib.md5(pwd.encode())
+            if(pwd==cpwd):
+                userinfo = user(username=emailid,
+                            password=hashpwd.hexdigest(),
+                            firstname=firstname,
+                            lastname=lastname,
+                            user_role=0)
+                db.session.add(userinfo)
+                db.session.commit()
+                return redirect("/admin/users")
+        return render_template("/admin/add_user.html", params=params)
+    else:
+        return redirect("/")
     
 @app.route('/admin/delete_user', methods=['GET','POST'])
 def delete_user():
