@@ -19,7 +19,7 @@ with open("config.json", "r") as c:
     params = json.load(c)["params"]
 local_server = True
 obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
-googlenews=GoogleNews(start=date.fromtimestamp(time.time()-604800).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
+googlenews=GoogleNews(start=date.fromtimestamp(time.time()-60*24*30).strftime('%m/%d/%Y'),end=date.fromtimestamp(time.time()).strftime('%m/%d/%Y'))
 googlenews.search('Stock Market')
 result=googlenews.result()
 
@@ -156,8 +156,8 @@ def logout():
 def error():
     return render_template("404.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/Symbol', methods = ['GET',"POST"])
-def Symbol():
+@app.route('/Stock', methods = ['GET',"POST"])
+def Stock():
     if(request.method == "GET" and request.args.get("stockSymbol")!=None):
         data =request.args.get("stockSymbol").split("_")
         obforcontext = Stocks(Symbol=data[0],period=data[1],stocprice=True)
@@ -175,8 +175,8 @@ def forgot_password():
         )
     return render_template("forgot-password.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
-@app.route('/tables')
-def tables():
+@app.route('/Symbol')
+def Symbol():
     dbdata = stock.query.all()
     return render_template("tables.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext ,dbdata=dbdata)
 
@@ -186,16 +186,60 @@ def sip():
 
 @app.route('/moving_average')
 def moving_average():
-    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True,moving_avg=True)
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
     return render_template("moving_average.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
 
 @app.route('/roi')
 def roi():
-    return render_template("roi.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext.stock)):
+        if obforcontext.stock.loc[i,'Day']==30:
+            sum+=obforcontext.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+    result1=round((tm_end*s)-sum,2)
+    roi1=round((result1/sum)*100,2)
+    obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext2.stock)):
+        if obforcontext2.stock.loc[i,'Day']==30:
+            sum+=obforcontext2.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+    result2=round((tm_end*s)-sum,2)
+    roi2=round((result2/sum)*100,2)
+    return render_template("roi.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
 
 @app.route('/profit_loss_ratio')
 def profit_loss_ratio():
-    return render_template("profit_loss_ratio.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
+    obforcontext = Stocks(Symbol="NESTLEIND.NS",period="max",stocprice=True)
+    stockname1=str(obforcontext.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext.stock)):
+        if obforcontext.stock.loc[i,'Day']==30:
+            sum+=obforcontext.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext.stock.loc[obforcontext.stock["Open"].size-1,'Open']
+    result1=round((tm_end*s)-sum,2)
+    roi1=round((result1/sum)*100,2)
+    obforcontext2=Stocks(Symbol="TATAMOTORS.NS",period="max",stocprice=True)
+    stockname2=str(obforcontext2.getinfo.info["underlyingSymbol"])
+    sum=0
+    s=0
+    for i in range(len(obforcontext2.stock)):
+        if obforcontext2.stock.loc[i,'Day']==30:
+            sum+=obforcontext2.stock.loc[i,'Open']
+            s+=1
+    tm_end=obforcontext2.stock.loc[obforcontext2.stock["Open"].size-1,'Open']
+    result2=round((tm_end*s)-sum,2)
+    roi2=round((result2/sum)*100,2)
+    return render_template("profit_loss_ratio.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
 
 @app.route('/stock_comparison')
 def stock_comparison():
@@ -218,7 +262,6 @@ def admin_register():
     if(session["emailid"] != None):
         return redirect("/")
     if(request.method=='POST'):
-        
         firstname = request.form.get("firstname")
         lastname = request.form.get("lastname")
         emailid = request.form.get("emailid")
