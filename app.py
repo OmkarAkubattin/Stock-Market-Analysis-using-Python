@@ -282,18 +282,6 @@ def stock_comparison():
     roi2=round((result2/sum)*100,2)
     return render_template("stock_comparison.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext,stockname=[stockname1,stockname2],result=[result1,result2],roi=[roi1,roi2])
 
-<<<<<<< HEAD
-@app.route('/admin/edit_stock')
-def edit_stock():
-    return render_template("admin/edit_stock.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-
-@app.route('/admin/user_edit')
-def user_edit():
-    return render_template("admin/user_edit.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
-=======
-
->>>>>>> fba46d495c4464c73835d7c1196162fa60c755b9
-
 @app.route('/stock/<string:stock_slug>', methods=['GET'])
 def stock_route(stock_slug):
     return render_template("stockind.html", params=params, news=result,newslen=int(len(result)/4 ), watchlistdata=Stocks().watchlist(watchlist=params["watchlist"]), ob=obforcontext)
