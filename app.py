@@ -332,7 +332,7 @@ def add_user():
     if request.form.get("edit_stock"):
         stock.query.filter_by(id=request.form.get("edit_stock")).first()
         return redirect("/admin")
-    return render_template("add_user.html", params=params)
+    return render_template("/admin/add_user.html", params=params)
     
 @app.route('/admin/delete_user', methods=['GET'])
 def delete_user():
