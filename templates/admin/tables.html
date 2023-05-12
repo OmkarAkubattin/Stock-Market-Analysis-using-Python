@@ -20,33 +20,26 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Symbol</th>
-                                            <th>Stock Name</th>
-                                            <th>Last Price</th>
-                                            <th>Industry</th>
-                                            <th>Type</th>
-                                            <th>Exchange</th>
+                                            <th>Username</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Phone No</th>
+                                            <th>User Type</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Symbol</th>
-                                            <th>Stock Name</th>
-                                            <th>Last Price</th>
-                                            <th>Industry</th>
-                                            <th>Type</th>
-                                            <th>Exchange</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         {% for item in dbdata %}
                                         <tr>
                                             <td><a href="/stock/{{item.symbol}}">{{item.symbol}}</a></td>
-                                            <td>{{item.name}}</td>
-                                            <td>{{item.lastprice}}</td>
-                                            <td>{{item.industry}}</td>
-                                            <td>{{item.type}}</td>
-                                            <td>{{item.exchange}}</td>
+                                            <td>{{item.username}}</td>
+                                            <td>{{item.firstname}}</td>
+                                            <td>{{item.lastname}}</td>
+                                            <td>{{item.phone_no}}</td>
+                                            <td>{{item.phone_no}}</td>
+                                            <td><form action="/admin/edit" method="get"><button type="submit" class="btn btn-primary" name="edit_stock" value="{{item.id}}">Edit</button></form></td>
+                                            <td><form action="/admin/delete" method="get"><button type="submit" class="btn btn-danger" name="delete_stock" value="{{item.id}}">Delete</button></form></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

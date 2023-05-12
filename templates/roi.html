@@ -1,77 +1,98 @@
 {% extends "layout.html" %}
 {% block body %}
-         <!-- Begin Page Content -->
-                <div class="container-fluid">
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">{{hashpwd}}ROI</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>        
-                    <div class="row row-cols-1 row-cols-md-6">
-                        {% for i in range(0,6) %}
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="media shadow p-3">
-                                    <img src="static\img\nifty.svg" width="15%" class="rounded-circle align-self-center mr-3" alt="...">
-                                    <div class="media-body">
-                                        <form action="/" method="GET">
-                                            <button type="submit" class="btn btn-link" name="changeSymbol" value="{{params['watchlist'][loop.index-1]}}" id="{{params['watchlist'][loop.index-1]}}">
-                                            <h5 class="my-0">{{params['watchlist'][loop.index-1]}}</h5>
-                                            </button>
-                                        </form>
-                                        <h6 style="display:inline-block;" class="my-0"><b>{{watchlistdata[params['watchlist'][loop.index-1]]["Close"]}}<span style="font-size:.7rem; "> INR </span></b></h6>
-                                        <span style="color: rgb(8, 153,129)">
-                                            <h6 style="display:inline-block;"><b>+{{watchlistdata[params['watchlist'][loop.index-1]]["Change%"]}}%</b></h6>
-                                      </span>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        {% endfor %}
-                        </div>                    
-                    
-                    <div class="col-xl-12 col-lg-7 pt-3">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div id='obgraph' class='chart'></div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{hashpwd}}ROI</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+    <div class="row row-cols-1 row-cols-md-6">
+        {% for i in range(0,6) %}
+        <div class="col-xl-2 col-md-6 mb-4">
+            <div class="media shadow p-3">
+                <img src="static\img\nifty.svg" width="15%" class="rounded-circle align-self-center mr-3" alt="...">
+                <div class="media-body">
+                    <form action="/" method="GET">
+                        <button type="submit" class="btn btn-link" name="changeSymbol"
+                            value="{{params['watchlist'][loop.index-1]}}" id="{{params['watchlist'][loop.index-1]}}">
+                            <h5 class="my-0">{{params['watchlist'][loop.index-1]}}</h5>
+                        </button>
+                    </form>
+                    <h6 style="display:inline-block;" class="my-0">
+                        <b>{{watchlistdata[params['watchlist'][loop.index-1]]["Close"]}}<span style="font-size:.7rem; ">
+                                INR </span></b>
+                    </h6>
+                    <span style="color: rgb(8, 153,129)">
+                        <h6 style="display:inline-block;">
+                            <b>+{{watchlistdata[params['watchlist'][loop.index-1]]["Change%"]}}%</b>
+                        </h6>
+                    </span>
                 </div>
-
-                    <h3>News flow</h3>
-
-                    {% for i in range(0,newslen) %}
-                    <div class="row row-cols-1 row-cols-md-5">
-                    {% for j in range(0,4) %}
-                        <div class="col-xl-3 col-md-6 mb-4">
-                        <!-- <div class="col mb-4"> -->
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <img src="https://source.unsplash.com/random/50{{j+(4*i)}}%C3%9750{{j+(4*i)}}/?Stock Market" class="card-img-top" alt="...">
-                                    <p class="card-text"><small class="text-muted">{{news[(j+(4*i))]["date"]}}</small></p>
-                                  <h5 class="card-title">{{news[(j+(4*i))]["title"]}}</h5>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    </div>
-                    {% endfor %}
-
-
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <form action="/roi" method="GET">
+        <div class="form-row row-cols-1 row-cols-md-6">
+            <div class="col-xl-2 col-md-6 mb-4">
+                <input type="text" class="form-control" placeholder="1st Symbol" name="symbol1">
+            </div>
+            <div class="col-xl-2 col-md-6 mb-4">
+                <input type="text" class="form-control" placeholder="2ed Symbol" name="symbol2">
+            </div>
+            <div class="col-xl-2 col-md-6 mb-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-xl-12 col-lg-7 pt-3">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div id='obgraph' class='chart'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>News flow</h3>
+
+{% for i in range(0,newslen) %}
+<div class="row row-cols-1 row-cols-md-5">
+    {% for j in range(0,4) %}
+    <div class="col-xl-3 col-md-6 mb-4">
+        <!-- <div class="col mb-4"> -->
+        <div class="card text-center">
+            <div class="card-body">
+                <img src="https://source.unsplash.com/random/50{{j+(4*i)}}%C3%9750{{j+(4*i)}}/?Stock Market"
+                    class="card-img-top" alt="...">
+                <p class="card-text"><small class="text-muted">{{news[(j+(4*i))]["date"]}}</small></p>
+                <h5 class="card-title">{{news[(j+(4*i))]["title"]}}</h5>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+
+</div>
+</div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
 
 {% endblock %}

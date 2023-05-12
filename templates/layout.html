@@ -420,6 +420,14 @@
             var obgraph = {{ob.Profit_Loss_Roi(stockname=stockname,result=result,roi=roi) | safe}};
             Plotly.plot('obgraph',obgraph,{});
         {% endif %}
+        {% if '/stock_comparison' == url_for(request.endpoint) %}
+            var obgraph = {{ob.Moving_avg() | safe}};
+            Plotly.plot('obgraph',obgraph,{});
+            var obgraphroi = {{ob.Profit_Loss_Roi(stockname=stockname,result=result,roi=roi,boolroi=true) | safe}};
+            Plotly.plot('obgraphroi',obgraphroi,{});
+            var obgraphprofitloss = {{ob.Profit_Loss_Roi(stockname=stockname,result=result,roi=roi) | safe}};
+            Plotly.plot('obgraphprofitloss',obgraphprofitloss,{});
+        {% endif %}
         {% if '/' == url_for(request.endpoint) %}
             var obgraph = {{ob.get_fig() | safe}};
             Plotly.plot('obgraph',obgraph,{});
@@ -452,7 +460,7 @@
         function Changeper(r) {
 
             // console.log(chartname)
-            {% if '/moving_average' == url_for(request.endpoint) %}
+            {% if '/moving_average' == url_for(request.endpoint) or '/stock_comparison' == url_for(request.endpoint) %}
                 Plotly.deleteTraces('obgraph',[0]);
                 Plotly.deleteTraces('obgraph',[0]);
                 Plotly.deleteTraces('obgraph',[0]);
