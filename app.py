@@ -62,7 +62,6 @@ class user(db.Model):
     password = db.Column(db.String(200), nullable=False)
     firstname = db.Column(db.String(30), nullable=False)
     lastname = db.Column(db.String(30), nullable=False)
-    phone_no = db.Column(db.Integer, nullable=True)
     user_role = db.Column(db.Integer, nullable=False)
 
 app.config.update(
@@ -124,13 +123,11 @@ def register():
         pwd = request.form.get("password")
         cpwd = request.form.get("cpassword")
         hashpwd = hashlib.md5(pwd.encode())
-        phone_no = request.form.get("phone_no")
         if(pwd==cpwd):
             userinfo = user(username=emailid,
                         password=hashpwd.hexdigest(),
                         firstname=firstname,
                         lastname=lastname,
-                        phone_no=phone_no,
                         user_role=0)
             db.session.add(userinfo)
             db.session.commit()
@@ -350,13 +347,11 @@ def add_user():
         pwd = request.form.get("password")
         cpwd = request.form.get("cpassword")
         hashpwd = hashlib.md5(pwd.encode())
-        phone_no = request.form.get("phone_no")
         if(pwd==cpwd):
             userinfo = user(username=emailid,
                         password=hashpwd.hexdigest(),
                         firstname=firstname,
                         lastname=lastname,
-                        phone_no=phone_no,
                         user_role=0)
             db.session.add(userinfo)
             db.session.commit()
