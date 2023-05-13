@@ -430,7 +430,7 @@ def add_stock():
             db.session.add(stockinfo)
             db.session.commit()
             return redirect("/admin/")
-        return render_template("/admin/add_stock.html", params=params,dbdata=dbdata)
+        return render_template("/admin/add_stock.html", params=params)
     else:
         return redirect("/")
 
