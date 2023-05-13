@@ -405,7 +405,7 @@ def user_edit():
                 userinfo.verified = True
                 db.session.commit()
                 return redirect("/admin/users")
-        return render_template("/admin/edit_user.html", params=params)
+        return render_template("/admin/edit_user.html", params=params,dbdata=dbdata)
     else:
         return redirect("/")
 
