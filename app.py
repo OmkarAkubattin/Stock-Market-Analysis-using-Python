@@ -144,6 +144,8 @@ def login():
         if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
             session["emailid"] = emailid
             session["user_role"] = dbdata.user_role
+            params["firstname"] = dbdata.firstname
+            params["lastname"] = dbdata.lastname
             if dbdata.user_role == 1:
                 return redirect("/admin")
             else:
@@ -358,6 +360,8 @@ def edit_stock():
     if not session.get("emailid") :
          return redirect("/login")
     elif session.get("user_role") == 1:
+        id = request.args.get("edit_stock")
+        dbdata=stock.query.filter_by(id=id).first()
         if request.method == "POST":
             symbol = request.form.get("symbol")
             name = request.form.get("stockname")
@@ -374,7 +378,7 @@ def edit_stock():
             stockinfo.verified = True
             db.session.commit()
             return redirect("/admin/")
-        return render_template("/admin/edit_stock.html", params=params)
+        return render_template("/admin/edit_stock.html", params=params,dbdata=dbdata)
     else:
         return redirect("/")
 
@@ -383,6 +387,8 @@ def user_edit():
     if not session.get("emailid") :
          return redirect("/login")
     elif session.get("user_role") == 1:
+        id = request.args.get("edit_user")
+        dbdata=user.query.filter_by(id=id).first()
         if request.method == "POST":
             firstname = request.form.get("firstname")
             lastname = request.form.get("lastname")
@@ -424,7 +430,7 @@ def add_stock():
             db.session.add(stockinfo)
             db.session.commit()
             return redirect("/admin/")
-        return render_template("/admin/add_stock.html", params=params)
+        return render_template("/admin/add_stock.html", params=params,dbdata=dbdata)
     else:
         return redirect("/")
 
