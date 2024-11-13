@@ -9,10 +9,22 @@
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <div class="row row-cols-1 row-cols-md-6">
+    <style>
+        .stcok-bar{
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .stcok-bar-col{
+            border: 1px solid gainsboro;
+        }
+        .stcok-bar h6{
+            font-size: .8rem;
+        }
+    </style>
+    <div class="stcok-bar">
         {% for i in range(0,6) %}
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="media shadow p-3">
+        <div class="stcok-bar-col">
+            <div class="media shadow p-1">
                 <img src="static\img\nifty.svg" width="15%" class="rounded-circle align-self-center mr-3" alt="...">
                 <div class="media-body">
                     <form action="/" method="GET">
@@ -36,7 +48,7 @@
     </div>
 
     <form action="/roi" method="GET">
-        <div class="form-row row-cols-1 row-cols-md-6">
+        <div class="form-row row-cols-1 row-cols-md-6 mt-4">
             <div class="col-xl-2 col-md-6 mb-4">
                 <input type="text" class="form-control" placeholder="1st Symbol" name="symbol1">
             </div>
@@ -72,7 +84,7 @@
         <!-- <div class="col mb-4"> -->
         <div class="card text-center">
             <div class="card-body">
-                <img src="https://source.unsplash.com/random/50{{j+(4*i)}}%C3%9750{{j+(4*i)}}/?Stock Market"
+                <img src="/static/img/new_img.webp"
                     class="card-img-top" alt="...">
                 <p class="card-text"><small class="text-muted">{{news[(j+(4*i))]["date"]}}</small></p>
                 <h5 class="card-title">{{news[(j+(4*i))]["title"]}}</h5>

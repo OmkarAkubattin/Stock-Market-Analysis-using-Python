@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, session, jsonify
 # from flask_session import Session
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
@@ -12,6 +12,7 @@ from GoogleNews import GoogleNews
 import pandas as pd
 from datetime import date
 import time
+import json
 
 
 with open("config.json", "r") as c:
@@ -140,7 +141,7 @@ def login():
         emailid = request.form.get("emailid")
         pwd = request.form.get("password")
         hashpwd = hashlib.md5(pwd.encode())
-        dbdata=user.query.filter_by(username=emailid,password=hashpwd.hexdigest()).one_or_404(description=f"No user named '{emailid}'.")
+        dbdata=user.query.filter_by(username=emailid,password=hashpwd.hexdigest()).first()#.one_or_404(description=f"No user named '{emailid}'.")
         if(dbdata.username==emailid or dbdata.password==hashpwd.hexdigest()):
             session["emailid"] = emailid
             session["user_role"] = dbdata.user_role
